@@ -5,31 +5,33 @@ import axios from 'axios';
 const AddToken = ({ isOpen, onClose, onSubmit }) => {
   const [tokens, setTokens] = useState([{ name: '', amount: '', NCA: false, stablecoin: false }]);
   const [tokenOptions, setTokenOptions] = useState([]);
-  const [loading, setLoading] = useState(false); // Added state for loading indicator
 
   useEffect(() => {
     const fetchTokens = async () => {
-      setLoading(true); // Set loading state to true
       try {
-        const response = await axios.get('https://api.coingecko.com/api/v3/simple/price', {
-          params: {
-            ids: 'bitcoin,ethereum,cardano,polkadot,ripple,litecoin,chainlink,stellar,filecoin,tron,tezos,eos,monero,neo,cosmos,vechain,aave,dogecoin,uniswap,theta,fantom,yearn-finance,maker,compound,algorand,ethereum-classic,bitshares,uma,hedera-hashgraph,zcash,elrond,nem,decred,sushiswap,terra-luna,the-graph,pancakeswap,cdai,axie-infinity,loopring,bittorrent-2,trust-wallet-token,huobi-token', // Add more tokens separated by commas if needed
-            vs_currencies: 'usd',
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:4000/api/getCryptos', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
         });
 
-        const options = Object.entries(response.data).map(([symbol, tokenData]) => ({
-          value: symbol,
-          label: `${symbol.toUpperCase()} (${tokenData.usd} USD)`, // Format label to include both symbol and USD value
-          NCA: false, // Assuming this data is not available for these tokens
-          stablecoin: false, // Assuming this data is not available for these tokens
-        }));
-        
-        setTokenOptions(options);
+        console.log(response.data); // Check the structure of the data
+
+        if (response.data && response.data.data && Array.isArray(response.data.data)) {
+          const options = response.data.data.map(token => ({
+            value: token.Name,
+            label: token.Name,
+            NCA: token.NCA,
+            stablecoin: token.Stablecoin
+          }));
+          setTokenOptions(options);
+          localStorage.setItem('cryptoData', JSON.stringify(response.data.data))
+        } else {
+          console.error('Unexpected data format:', response.data);
+        }
       } catch (error) {
-        console.error('Error fetching token data:', error);
-      } finally {
-        setLoading(false); // Set loading state to false after fetching
+        console.error('Error fetching crypto data:', error);
       }
     };
 
@@ -49,6 +51,7 @@ const AddToken = ({ isOpen, onClose, onSubmit }) => {
   };
 
   const handleSubmit = () => {
+    const cryptoDat = JSON.parse(localStorage.getItem('cryptoData'))
     onSubmit(tokens);
     onClose();
   };
@@ -65,6 +68,8 @@ const AddToken = ({ isOpen, onClose, onSubmit }) => {
               onChange={(selectedOption) => {
                 const updatedTokens = [...tokens];
                 updatedTokens[index].name = selectedOption.value;
+                updatedTokens[index].NCA = selectedOption.NCA; // Update NCA value
+                updatedTokens[index].stablecoin = selectedOption.stablecoin;
                 console.log('to:', updatedTokens)
                 setTokens(updatedTokens);
               }}
