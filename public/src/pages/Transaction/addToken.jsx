@@ -10,7 +10,7 @@ const AddToken = ({ isOpen, onClose, onSubmit }) => {
     const fetchTokens = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:4000/api/getCryptos', {
+        const response = await axios.get('https://metatool2-2.onrender.com/api/getCryptos', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
