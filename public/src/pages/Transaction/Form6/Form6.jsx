@@ -24,7 +24,7 @@ const Form6 = ({ formData }) => {
 
   const handleSubmitData = (e) => {
     e.preventDefault();
-    const serverUrl = `http://localhost:4000/api/addDetails`;
+    const serverUrl = `https://metatool2-2.onrender.com/api/addDetails`;
     const sendData = {
       localCurrencyName: formDataFromForm4.form5Data.csvDetails.currencyName,
       localCurrencyAmount: formDataFromForm4.form5Data.csvDetails.amount,
