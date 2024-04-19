@@ -112,7 +112,7 @@ const handleCurrencyChange = async (selectedOption, index) => {
     const cryptoAmountInUSD = cryptoAmount * cryptoConversionRate;
 
     const finalAmountInCurrency = cryptoAmountInUSD * selectedRate;
-
+     const selectedRateUSD = 1 / selectedRate;
     const cryptoData = {
       token: selectedTokenId,
       amount: cryptoAmount,
@@ -121,6 +121,7 @@ const handleCurrencyChange = async (selectedOption, index) => {
       finalCurrencyName: selectedCurrency,
       cryptoConversionRate: cryptoConversionRate,
       currencyConversionRate: selectedRate,
+      currencyConversionRateUSD: selectedRateUSD,
     };
     localStorage.setItem('cryptoData', JSON.stringify(cryptoData));
     console.log(`Token ${index + 1} calculations:`, cryptoData);
