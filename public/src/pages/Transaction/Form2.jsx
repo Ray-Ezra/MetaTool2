@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AddToken from './addToken';
@@ -11,10 +11,11 @@ import CSVDetailsModal from './csvForms/local';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
+
 const Form2 = ({ onNextForm }) => {
   const { tokens: initialTokens, setTokens } = useTokenContext();
   const [recipients, setRecipients] = useState([
-    { id: 1, name: '', organization: '', wallet: '', selectedTokens: [], tokenCount: 0 },
+    { id: 1, name: '', organization: '', wallet: '', selectedTokens: [], tokenCount: 0,   cryptoData: null },
   ]);
   const [showOverlay, setShowOverlay] = useState(false);
   const [showTokenTable, setShowTokenTable] = useState(false);
@@ -23,7 +24,8 @@ const Form2 = ({ onNextForm }) => {
   const [csvCurrencyName, setCsvCurrencyName] = useState('');
   const [csvAmount, setCsvAmount] = useState(0);
   const [csvRate, setCsvRate] = useState(0);
-
+  const cryptoData = JSON.parse(localStorage.getItem('cryptoData'))
+  console.log(cryptoData)
 
 
   const toastOptions = {
@@ -33,6 +35,8 @@ const Form2 = ({ onNextForm }) => {
     draggable: true,
     theme: 'light',
   };
+
+ 
 
   const isNameValid = /^[a-zA-Z]+[a-zA-Z\s]*$/;
   const isWalletValid = /^[a-zA-Z0-9]{25,}$/;
@@ -73,10 +77,11 @@ const Form2 = ({ onNextForm }) => {
 
 
   const handleTokenChange = (id, selectedTokens) => {
+    const newCryptoData = JSON.parse(localStorage.getItem('cryptoData'))
     setRecipients(prevRecipients => {
       const updatedRecipients = prevRecipients.map(recipient => {
         if (recipient.id === id) {
-          return { ...recipient, selectedTokens: selectedTokens, tokenCount: selectedTokens.length };
+          return { ...recipient, selectedTokens: selectedTokens, tokenCount: selectedTokens.length, cryptoData: newCryptoData };
         }
         return recipient;
       });
@@ -102,7 +107,7 @@ const Form2 = ({ onNextForm }) => {
     const newRecipientId = recipients.length + 1;
     setRecipients((prevRecipients) => [
       ...prevRecipients,
-      { id: newRecipientId, name: '', organization: '', wallet: '', selectedTokens: [], tokenCount: 0 },
+      { id: newRecipientId, name: '', organization: '', wallet: '', selectedTokens: [], tokenCount: 0 ,cryptoData: null },
     ]);
   };
 
@@ -158,11 +163,15 @@ const Form2 = ({ onNextForm }) => {
   };
 
   const handleAddToken = (recipientId, newToken) => {
+    // const newCryptoData = JSON.parse(localStorage.getItem('cryptoData'));
     setRecipients(prevRecipients => {
       const updatedRecipients = prevRecipients.map(recipient => {
         if (recipient.id === recipientId) {
           const updatedTokens = [...recipient.selectedTokens, newToken];
-          return { ...recipient, selectedTokens: updatedTokens, tokenCount: updatedTokens.length };
+          // const updatedCryptoData = { ...newCryptoData };
+          return { ...recipient, selectedTokens: updatedTokens, tokenCount: updatedTokens.length,
+            //  cryptoData: updatedCryptoData
+             };
         }
         return recipient;
       });
