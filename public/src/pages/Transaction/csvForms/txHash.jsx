@@ -24,7 +24,7 @@ const TransactionForm = () => {
   const handleSubmitData = () => {
     console.log('Sending Data to server')
     e.preventDefault();
-    const serverUrl =  `https://metatool2-2.onrender.com/api/addDetails`
+    const serverUrl =  `https://metatool2.onrender.com/api/addDetails`
     const sendData = {
       TxHash: txHash,
       Wallet: address,

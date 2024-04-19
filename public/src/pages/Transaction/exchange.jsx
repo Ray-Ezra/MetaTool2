@@ -7,8 +7,8 @@ const Form5 = ({ onNextForm }) => {
   const { tokens } = useTokenContext();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [exchangeRates, setExchangeRates] = useState({});
-  const cryptoDat = JSON.parse(localStorage.getItem('cryptoData'))
-  console.log(cryptoDat)
+  const cryptoData = JSON.parse(localStorage.getItem('cryptoData'))
+  console.log(cryptoData)
   const toastOptions = {
     position: "bottom-right",
     autoClose: 8000,
@@ -21,7 +21,7 @@ const Form5 = ({ onNextForm }) => {
     const initialRates = {};
     tokens.forEach(token => {
       // Find the corresponding token in cryptoDat
-      const cryptoToken = cryptoDat.find(cryptoToken => cryptoToken.Name === token.name);
+      const cryptoToken = cryptoData.find(cryptoToken => cryptoToken.Name === token.name);
 
       // Set NCA and Stablecoin values based on cryptoDat (if found)
       const nca = cryptoToken?.NCA || false; // Use optional chaining for NCA
