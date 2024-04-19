@@ -27,15 +27,15 @@ const Form6 = ({ formData }) => {
   const handleSubmitData = (e) => {
     e.preventDefault();
     const serverUrl = `https://metatool2.onrender.com/api/addDetails`;
-     const sendData = recipients.map(recipient => ({
-      localCurrencyName: recipient.cryptoData.finalCurrencyName,
-      localCurrencyAmount: recipient.cryptoData.finalCurrencyAmount,
-      localCurrencyUsdRate: recipient.cryptoData.currencyConversionRateUSD,
+    const sendData = {
+      localCurrencyName: formDataFromForm4.form4Data.recipients[0].cryptoData.finalCurrencyName,
+      localCurrencyAmount: formDataFromForm4.form4Data.recipients[0].cryptoData.finalCurrencyAmount,
+      localCurrencyUsdRate: formDataFromForm4.form4Data.recipients[0].cryptoData.currencyConversionRateUSD,
       TXHash: txHash,
       Wallet: address,
       TxFee: txFee,
-      TxPerRecipient: txFee / recipients.length // Assuming txFee is split equally among recipients
-    }));
+      TxPerRecipient: txFee / formDataFromForm4.form4Data.recipients.length
+    };
     const axiosConfig = {
       headers: {
         'Content-Type': 'application/json',
