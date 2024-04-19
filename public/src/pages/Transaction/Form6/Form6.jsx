@@ -9,6 +9,8 @@ const Form6 = ({ formData }) => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const formDataFromForm4 = JSON.parse(localStorage.getItem('formDataFromForm4'));
+   console.log('this:',formDataFromForm4)
+  const recipients = formDataFromForm4.form4Data.recipients
 
   const handleTxHashChange = (e) => {
     setTxHash(e.target.value);
@@ -25,15 +27,15 @@ const Form6 = ({ formData }) => {
   const handleSubmitData = (e) => {
     e.preventDefault();
     const serverUrl = `https://metatool2.onrender.com/api/addDetails`;
-    const sendData = {
-      localCurrencyName: formDataFromForm4.form5Data.csvDetails.currencyName,
-      localCurrencyAmount: formDataFromForm4.form5Data.csvDetails.amount,
-      localCurrencyUsdRate: formDataFromForm4.form5Data.csvDetails.rate,
+     const sendData = recipients.map(recipient => ({
+      localCurrencyName: recipient.cryptoData.finalCurrencyName,
+      localCurrencyAmount: recipient.cryptoData.finalCurrencyAmount,
+      localCurrencyUsdRate: recipient.cryptoData.currencyConversionRateUSD,
       TXHash: txHash,
       Wallet: address,
       TxFee: txFee,
-      TxPerRecipient: txFee / formDataFromForm4.form5Data.recipients.length
-    };
+      TxPerRecipient: txFee / recipients.length // Assuming txFee is split equally among recipients
+    }));
     const axiosConfig = {
       headers: {
         'Content-Type': 'application/json',

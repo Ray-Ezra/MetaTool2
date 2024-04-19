@@ -18,18 +18,21 @@ const Form4 = ({ formData }) => {
   const handleSendData = () => {
     const serverUrl = `${SERVER_URL}/api/addRecipientTransaction`;
 
-    const exchangeData = formData.form4Data.exchangeRates
-      ? Object.values(formData.form4Data.exchangeRates).flatMap(rates => rates.map(rate => ({
-        base_currency: rate.base_currency,
-        quote_currency: rate.quote_currency,
-        rate: rate.rate,
-        time: rate.time,
-        stablecoin: rate.Stablecoin,
-        NCA: rate.NCA
-      })))
+    const exchangeData = formData.form4Data.recipients
+      ? formData.form4Data.recipients.flatMap(recipient => {
+          const cryptoData = recipient.cryptoData;
+          return Object.keys(cryptoData).map(currency => ({
+            base_currency: cryptoData.token,
+            quote_currency: 'USD', // Assuming quote currency is USD
+            rate: cryptoData.cryptoConversionRate,
+            time: new Date().toISOString(), // Assuming current time
+            stablecoin: false, // You need to define where this comes from
+            NCA:true // You need to define where this comes from
+          }));
+        })
       : [];
 
-    const recipientsData = formData.form5Data.recipients.map((recipient, index) => ({
+    const recipientsData = formData.form4Data.recipients.map((recipient, index) => ({
       name: recipient.name,
       org: recipient.organization,
       wallet: recipient.wallet,
@@ -48,11 +51,11 @@ const Form4 = ({ formData }) => {
       transactionName: formData.form2Data.name,
       transactionDescription: formData.form2Data.description,
       recipients: recipientsData,
-      tokenName: formData.form5Data.tokens.map((token) => ({
+      tokenName: formData.form4Data.tokens.map((token) => ({
         name: token.name,
         amount: token.amount,
       })),
-      amount: formData.form5Data.amount,
+      // amount: formData.form5Data.amount,
       classificationName: formData.form2Data.classification,
       descriptionName: formData.form2Data.description,
       // exchangeRates:formData.form4Data.exchangeRates,
