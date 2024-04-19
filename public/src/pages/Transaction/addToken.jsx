@@ -13,35 +13,43 @@ const AddToken = ({ isOpen, onClose, onSubmit }) => {
       try {
         const response = await axios.get('https://api.coingecko.com/api/v3/simple/price', {
           params: {
-            ids: 'bitcoin,ethereum,usd-coin,cardano,polkadot,ripple,litecoin,chainlink,stellar,filecoin,tron,tezos,eos,monero,neo,cosmos,vechain,aave,dogecoin,uniswap,theta,fantom,yearn-finance,maker,compound,algorand,ethereum-classic,bitshares,uma,hedera-hashgraph,zcash,elrond,nem,decred,sushiswap,terra-luna,the-graph,pancakeswap,cdai,axie-infinity,loopring,bittorrent-2,trust-wallet-token,huobi-token',
+            ids: 'bitcoin,djed,ethereum,usd-coin,cardano,polkadot,ripple,litecoin,chainlink,stellar,filecoin,tron,tezos,eos,monero,neo,cosmos,vechain,aave,dogecoin,uniswap,theta,fantom,yearn-finance,maker,compound,algorand,ethereum-classic,bitshares,uma,hedera-hashgraph,zcash,elrond,nem,decred,sushiswap,terra-luna,the-graph,pancakeswap,cdai,axie-infinity,loopring,bittorrent-2,trust-wallet-token,huobi-token',
             vs_currencies: 'usd',
           },
         });
-
+    
         const exchangeRatesData = response.data;
         setExchangeRates(exchangeRatesData);
-
+    
         const tokenInfoResponse = await axios.get('https://api.coingecko.com/api/v3/coins/list');
         const tokenInfo = tokenInfoResponse.data.reduce((acc, token) => {
           acc[token.id] = token;
           return acc;
         }, {});
-
+    
         const options = Object.keys(exchangeRatesData).map(tokenId => {
           const token = tokenInfo[tokenId];
-          const isStablecoin = token && token.categories && token.categories.includes('Stablecoins');
-
+          let isStablecoin = false;
+    
+          // Check if the token is a stablecoin based on its name or any other identifier
+          if (['djed', 'usd-coin', 'tether'].includes(tokenId)) {
+            isStablecoin = true;
+          } else if (token && token.categories) {
+            isStablecoin = token.categories.includes('Stablecoins');
+          }
+    
           return {
             value: tokenId,
             label: `${tokenId} - Price: $${exchangeRatesData[tokenId].usd} - ${isStablecoin ? 'Stablecoin' : 'Native cryptocurrency'}`,
           };
         });
-
+    
         setTokenOptions(options);
       } catch (error) {
         console.error('Error fetching token exchange rates:', error);
       }
     };
+    
 
     fetchTokens();
   }, []);
