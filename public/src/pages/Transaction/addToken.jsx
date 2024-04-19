@@ -104,38 +104,45 @@ const AddToken = ({ isOpen, onClose, onSubmit }) => {
 
   // Inside handleCurrencyChange function
 
-const handleCurrencyChange = async (selectedOption, index) => {
-  const selectedCurrency = selectedOption.value;
-  const selectedRate = selectedOption.rate;
-
-  const updatedTokens = [...tokens];
-  updatedTokens[index].selectedCurrency = selectedOption;
-  setTokens(updatedTokens);
-
-  if (updatedTokens[index].selectedToken && updatedTokens[index].selectedToken.value) {
-    const selectedTokenId = updatedTokens[index].selectedToken.value;
-    const cryptoConversionRate = exchangeRates[selectedTokenId].usd;
-
-    const cryptoAmount = parseFloat(updatedTokens[index].amount || 0);
-    const cryptoAmountInUSD = cryptoAmount * cryptoConversionRate;
-
-    const finalAmountInCurrency = cryptoAmountInUSD * selectedRate;
-     const selectedRateUSD = 1 / selectedRate;
-    const cryptoData = {
-      token: selectedTokenId,
-      amount: cryptoAmount,
-      amountUSD: cryptoAmountInUSD,
-      finalCurrencyAmount: finalAmountInCurrency,
-      finalCurrencyName: selectedCurrency,
-      cryptoConversionRate: cryptoConversionRate,
-      currencyConversionRate: selectedRate,
-      currencyConversionRateUSD: selectedRateUSD,
-    };
-    localStorage.setItem('cryptoData', JSON.stringify(cryptoData));
-    console.log(`Token ${index + 1} calculations:`, cryptoData);
-  }
-};
-
+  const handleCurrencyChange = async (selectedOption, index) => {
+    const selectedCurrency = selectedOption.value;
+    const selectedRate = selectedOption.rate;
+  
+    const updatedTokens = [...tokens];
+    updatedTokens[index].selectedCurrency = selectedOption;
+    setTokens(updatedTokens);
+  
+    const cryptoDataArray = [];
+  
+    updatedTokens.forEach((token, tokenIndex) => {
+      if (token.selectedToken && token.selectedToken.value) {
+        const selectedTokenId = token.selectedToken.value;
+        const cryptoConversionRate = exchangeRates[selectedTokenId].usd;
+  
+        const cryptoAmount = parseFloat(token.amount || 0);
+        const cryptoAmountInUSD = cryptoAmount * cryptoConversionRate;
+  
+        const finalAmountInCurrency = cryptoAmountInUSD * selectedRate;
+        const selectedRateUSD = 1 / selectedRate;
+        const cryptoData = {
+          token: selectedTokenId,
+          amount: cryptoAmount,
+          amountUSD: cryptoAmountInUSD,
+          finalCurrencyAmount: finalAmountInCurrency,
+          finalCurrencyName: selectedCurrency,
+          cryptoConversionRate: cryptoConversionRate,
+          currencyConversionRate: selectedRate,
+          currencyConversionRateUSD: selectedRateUSD,
+        };
+  
+        cryptoDataArray[tokenIndex] = cryptoData;
+      }
+    });
+  
+    localStorage.setItem('cryptoData', JSON.stringify(cryptoDataArray));
+    console.log('All Tokens calculations:', cryptoDataArray);
+  };
+  
 
   const handleSubmit = () => {
     onSubmit(tokens);
