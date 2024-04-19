@@ -61,7 +61,7 @@ const Form2 = ({ onNextForm }) => {
           rate: csvRate,
         }
       };
-      onNextForm(5, formData);
+      onNextForm(4, formData);
     } else {
       toast.error('Invalid Name or Wallet Address.', toastOptions);
     }
@@ -185,6 +185,8 @@ const Form2 = ({ onNextForm }) => {
     // Process formData as needed
     console.log('CSV Details:', formData);
   };
+
+  
   return (
     <div style={{marginTop: '20px'}}>
       {recipients.map((recipient, index) => (
