@@ -26,22 +26,31 @@ const Form6 = ({ formData }) => {
 
   const handleSubmitData = (e) => {
     e.preventDefault();
-    const serverUrl = `https://metatool2.onrender.com/api/addDetails`;
-    const sendData = {
-      localCurrencyName: formDataFromForm4.form4Data.recipients[0].cryptoData.finalCurrencyName,
-      localCurrencyAmount: formDataFromForm4.form4Data.recipients[0].cryptoData.finalCurrencyAmount,
-      localCurrencyUsdRate: formDataFromForm4.form4Data.recipients[0].cryptoData.currencyConversionRateUSD,
-      TXHash: txHash,
-      Wallet: address,
-      TxFee: txFee,
-      TxPerRecipient: txFee / formDataFromForm4.form4Data.recipients.length
-    };
+    const serverUrl = `http://localhost:4000/api/addDetails`;
+    const recipients = formDataFromForm4.form4Data.recipients;
+
+    const sendData = recipients.flatMap(recipient => {
+      const cryptoData = recipient.cryptoData;
+      return cryptoData.map(data => ({
+        recipien:recipient.name,
+        localCurrencyName: data.finalCurrencyName,
+        localCurrencyAmount: data.finalCurrencyAmount,
+        localCurrencyUsdRate: data.currencyConversionRateUSD,
+        localCurrencyUsdAmount: data.amountUSD,
+        TXHash: txHash,
+        Wallet: address,
+        TxFee: txFee,
+        TxPerRecipient: txFee / cryptoData.length // Assuming you're calculating the fee per recipient
+      }));
+    });
+    
     const axiosConfig = {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       }
     };
+    
     axios
       .post(serverUrl, sendData, axiosConfig)
       .then((response) => {

@@ -19,18 +19,19 @@ const Form4 = ({ formData }) => {
     const serverUrl = `${SERVER_URL}/api/addRecipientTransaction`;
 
     const exchangeData = formData.form4Data.recipients
-      ? formData.form4Data.recipients.flatMap(recipient => {
-          const cryptoData = recipient.cryptoData;
-          return Object.keys(cryptoData).map(currency => ({
-            base_currency: cryptoData.token,
-            quote_currency: 'USD', // Assuming quote currency is USD
-            rate: cryptoData.cryptoConversionRate,
-            time: new Date().toISOString(), // Assuming current time
-            stablecoin: false, // You need to define where this comes from
-            NCA:true // You need to define where this comes from
-          }));
-        })
-      : [];
+    ? formData.form4Data.recipients.flatMap(recipient => {
+        const cryptoData = recipient.cryptoData;
+        return cryptoData.map(data => ({
+          base_currency: data.token,
+          quote_currency: 'USD', // Assuming quote currency is USD
+          rate: data.cryptoConversionRate,
+          time: new Date().toISOString(), // Assuming current time
+          stablecoin: data.stablecoin, // You need to define where this comes from
+          NCA: data.NCA // You need to define where this comes from
+        }));
+      })
+    : [];
+  
 
     const recipientsData = formData.form4Data.recipients.map((recipient, index) => ({
       name: recipient.name,

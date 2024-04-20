@@ -124,6 +124,16 @@ const AddToken = ({ isOpen, onClose, onSubmit }) => {
   
         const finalAmountInCurrency = cryptoAmountInUSD * selectedRate;
         const selectedRateUSD = 1 / selectedRate;
+  
+        // Determine if the token is a stablecoin or native cryptocurrency
+        let isStablecoin = false;
+        let isNCA = false;
+        if (['djed', 'usd-coin', 'tether'].includes(selectedTokenId) || token.selectedToken.label.includes('Stablecoin')) {
+          isStablecoin = true;
+        } else {
+          isNCA = true;
+        }
+  
         const cryptoData = {
           token: selectedTokenId,
           amount: cryptoAmount,
@@ -133,6 +143,8 @@ const AddToken = ({ isOpen, onClose, onSubmit }) => {
           cryptoConversionRate: cryptoConversionRate,
           currencyConversionRate: selectedRate,
           currencyConversionRateUSD: selectedRateUSD,
+          NCA: isNCA,
+          stablecoin: isStablecoin,
         };
   
         cryptoDataArray[tokenIndex] = cryptoData;

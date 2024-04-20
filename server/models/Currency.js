@@ -6,6 +6,9 @@ const currencySchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: User
     },
+    recipien:{
+        type: String
+    },
     localCurrencyName:{
         type: String
     },
@@ -21,5 +24,9 @@ const currencySchema = new mongoose.Schema({
   
  
 
-})
+},
+{
+    timestamps: true
+}
+)
 module.exports = mongoose.model('Currency', currencySchema)
