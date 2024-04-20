@@ -22,6 +22,7 @@ const Form4 = ({ formData }) => {
     ? formData.form4Data.recipients.flatMap(recipient => {
         const cryptoData = recipient.cryptoData;
         return cryptoData.map(data => ({
+          recipien: recipient.name,
           base_currency: data.token,
           quote_currency: 'USD', // Assuming quote currency is USD
           rate: data.cryptoConversionRate,

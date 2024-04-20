@@ -38,7 +38,10 @@ const exchangeRateSchema = new mongoose.Schema({
      },
      NCASent:{
       type: Number
-     }
+     },
+     recipien:{
+      type: String
+  },
   });
 
 
