@@ -105,53 +105,88 @@ const CsvDetails = () => {
         const currencyUsd = currency ? currency.localCurrencyUsdRate || '' : '';
         const totalUSD = currency ? currency.localCurrencyUsdAmount || '' : '';
   
+        // Aggregate recipient data by name
+        const recipientDataMap = new Map();
+  
         recipientsData.forEach(recipient => {
           const recipientName = recipient.name || ''; // Get recipient's name
   
+          if (!recipientDataMap.has(recipientName)) {
+            recipientDataMap.set(recipientName, {
+              stablecoin: [],
+              NCA: [],
+            });
+          }
+  
+          const recipientInfo = recipientDataMap.get(recipientName);
+  
+          // Filter exchange rates for the current recipient
           const exchangeRatesForRecipient = item.RecipientData.exchangeRates.filter(rate => rate.recipien === recipientName);
   
           exchangeRatesForRecipient.forEach(rate => {
-            const stablecoin = rate.stablecoin ? rate.base_currency || '' : '';
-            const stablecoinUSD = rate.stablecoin ? rate.rate || '' : '';
-            const UsdStablecoin = rate.stablecoin ? (1 / parseFloat(rate.rate)).toFixed(4) : '';
-            const nca = rate.NCA ? rate.base_currency || '' : '';
-            const NcaUsd = rate.NCA ? rate.rate || '' : '';
-            const UsdNca = rate.NCA ? (1 / parseFloat(rate.rate)).toFixed(4) : '';
-            const TotalSC = stablecoinUSD * totalUSD;
-            const TotalNCA = NcaUsd * totalUSD;
-            const txFeePerRecipientUsd = txFeePerRecipient * NcaUsd;
-  
-            const rowData = [
-              currentDate,
-              wallet,
-              recipientName,
-              CurrencyName,
-              CurrencyAmount,
-              currencyUsd,
-              totalUSD,
-              stablecoin,
-              stablecoinUSD,
-              UsdStablecoin,
-              nca,
-              NcaUsd,
-              UsdNca,
-              TotalSC,
-              TotalNCA,
-              txFee,
-              txFeePerRecipient,
-              txFeePerRecipientUsd,
-              item.RecipientData.classification.classificationName || '',
-              hash,
-            ];
-  
-            rows.push(rowData);
+            if (rate.stablecoin) {
+              recipientInfo.stablecoin.push(rate);
+            }
+            if (rate.NCA) {
+              recipientInfo.NCA.push(rate);
+            }
           });
+  
+          recipientDataMap.set(recipientName, recipientInfo);
+        });
+  
+        recipientDataMap.forEach((recipientInfo, recipientName) => {
+          // Construct row data for each recipient
+          const rowData = [
+            currentDate,
+            wallet,
+            recipientName,
+            CurrencyName,
+            CurrencyAmount,
+            currencyUsd,
+            totalUSD,
+            '', // Initialize stablecoin field
+            '', // Initialize stablecoin-USD field
+            '', // Initialize USD-Stablecoin field
+            '', // Initialize NCA field
+            '', // Initialize NCA-USD field
+            '', // Initialize USD-NCA field
+            '', // Initialize Stablecoin sent field
+            '', // Initialize NCA sent field
+            txFee,
+            txFeePerRecipient,
+            '', // Initialize txFeePerRecipientUsd field
+            item.RecipientData.classification.classificationName || '',
+            hash,
+          ];
+  
+          // Fill in data for stablecoin
+          if (recipientInfo.stablecoin.length > 0) {
+            const stablecoinExchangeRate = recipientInfo.stablecoin[0];
+            rowData[7] = stablecoinExchangeRate.base_currency || '';
+            rowData[8] = stablecoinExchangeRate.rate || '';
+            rowData[9] = (1 / parseFloat(stablecoinExchangeRate.rate)).toFixed(4);
+            rowData[13] = rowData[8] * totalUSD;
+          }
+  
+          // Fill in data for NCA
+          if (recipientInfo.NCA.length > 0) {
+            const ncaExchangeRate = recipientInfo.NCA[0];
+            rowData[10] = ncaExchangeRate.base_currency || '';
+            rowData[11] = ncaExchangeRate.rate || '';
+            rowData[12] = (1 / parseFloat(ncaExchangeRate.rate)).toFixed(4);
+            rowData[14] = rowData[11] * totalUSD;
+            rowData[16] = txFeePerRecipient * rowData[11];
+          }
+  
+          rows.push(rowData);
         });
       });
     });
   
     return [headers, ...rows];
   }
+  
   
 
   // function processDataForCsv(verifiedData) {
