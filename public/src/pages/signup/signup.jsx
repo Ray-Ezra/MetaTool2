@@ -48,8 +48,9 @@ const SignUp = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(formData),
       });
+      console.log(formData)
       
       if (!response.ok) {
         const data = await response.json();

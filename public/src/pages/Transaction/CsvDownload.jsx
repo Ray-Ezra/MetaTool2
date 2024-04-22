@@ -113,9 +113,7 @@ const formDataFromForm4 = JSON.parse(localStorage.getItem('formDataFromForm4'));
   
         recipientsData.forEach(recipient => {
           const recipientName = recipient.name || ''; // Get recipient's name
-          const matchingRecipient = recipientDataFromLocalStorage && recipientDataFromLocalStorage.recipients.find(
-            localRecipient => localRecipient.name === recipientName
-        );
+    
   
           if (!recipientDataMap.has(recipientName)) {
             recipientDataMap.set(recipientName, {
