@@ -61,6 +61,9 @@ const CsvDetails = () => {
   }
 
   function processDataForCsv(verifiedData) {
+const formDataFromForm4 = JSON.parse(localStorage.getItem('formDataFromForm4'));
+    const recipientDataFromLocalStorage = formDataFromForm4 && formDataFromForm4.form4Data;
+
     const currentDate = new Date().toLocaleDateString('en-US', {
       year: 'numeric',
       month: '2-digit',
@@ -101,7 +104,7 @@ const CsvDetails = () => {
   
       item.Currency.forEach(currency => {
         const CurrencyName = currency ? currency.localCurrencyName || '' : '';
-        const CurrencyAmount = currency ? currency.localCurrencyAmount || '' : '';
+        // const CurrencyAmount = currency ? currency.localCurrencyAmount || '' : '';
         const currencyUsd = currency ? currency.localCurrencyUsdRate || '' : '';
         const totalUSD = currency ? currency.localCurrencyUsdAmount || '' : '';
   
@@ -110,6 +113,9 @@ const CsvDetails = () => {
   
         recipientsData.forEach(recipient => {
           const recipientName = recipient.name || ''; // Get recipient's name
+          const matchingRecipient = recipientDataFromLocalStorage && recipientDataFromLocalStorage.recipients.find(
+            localRecipient => localRecipient.name === recipientName
+        );
   
           if (!recipientDataMap.has(recipientName)) {
             recipientDataMap.set(recipientName, {
@@ -136,6 +142,9 @@ const CsvDetails = () => {
         });
   
         recipientDataMap.forEach((recipientInfo, recipientName) => {
+          if (matchingRecipient) {
+            const CurrencyAmount = matchingRecipient.cryptoData[0].finalCurrencyAmount || '';
+
           // Construct row data for each recipient
           const rowData = [
             currentDate,
@@ -180,6 +189,7 @@ const CsvDetails = () => {
           }
   
           rows.push(rowData);
+          }
         });
       });
     });
