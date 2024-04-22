@@ -76,6 +76,7 @@ const SignUp = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '20px' }}>
           <img src="/Logo icon 5.png" alt="DirectEd" className="login-icon" width="42px" height="38px" />
           <h2 style={{ color: 'black', marginLeft: '10px', transform: 'translateY(10%)' }}>DirectEd</h2>
+          <a  style={{color:'black', fontWeight:"bold", marginLeft: '10rem'}} href="/">Login</a>
         </div>
         <h2 style={{ fontSize: '20px', marginBottom: '20px', color: 'black', fontWeight: '600', textAlign: 'left' }}>Sign Up</h2>
         <form onSubmit={handleSubmit}>
