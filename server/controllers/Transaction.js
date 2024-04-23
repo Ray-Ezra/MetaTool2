@@ -20,7 +20,7 @@ const NewTransactionController= {
         try {
 
             const { //transactionName,transactionDescription ,
-              tokenName,
+              // tokenName,
               descriptionName,
                classificationName,
                recipients: [...recipientData], 
@@ -38,11 +38,11 @@ const NewTransactionController= {
           /*const recipient = await Recipient.create({ //User:User,
             name,  org, comment, token1, amount1, token2,amount2 });
 */
-const tokens = await Promise.all(
-  tokenName.map(async ({ name, amount }) => {
-    return await Token.create({ tokenName: { name, amount } });
-  })
-)
+// const tokens = await Promise.all(
+//   tokenName.map(async ({ name, amount }) => {
+//     return await Token.create({ tokenName: { name, amount } });
+//   })
+// )
           
             const description = await Description.create({descriptionName})
            // const token = await Token.create({tokenName, amount})
@@ -58,7 +58,7 @@ const tokens = await Promise.all(
                 description,
                 exchangeRates:exchangeRates,
                 recipients,
-                token: tokens.map(token => token._id),
+                // token: tokens.map(token => token._id),
                 verified: true,
             })
     

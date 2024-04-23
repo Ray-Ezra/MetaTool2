@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Form1 from './Form1';
 import Form2 from './Form2';
 import Form4 from './Form4';
-import Form5 from './exchange';
 import Form6 from './Form6/Form6';
 
 const FormDisplay = () => {
@@ -13,7 +12,6 @@ const FormDisplay = () => {
     form3data: {
       token:[]
     },
-    form5data: {}
   });
 
   const handleNextForm = (nextForm, data) => {
@@ -36,7 +34,6 @@ const FormDisplay = () => {
             </>
           )}
           {currentForm === 4 && <Form4 formData={formData} />}
-          {currentForm === 5 && <Form5 onNextForm={handleNextForm} />}
           {currentForm === 6 && <Form6 onNextForm={handleNextForm} />}
         </div>
       </div>    

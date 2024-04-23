@@ -35,7 +35,9 @@ const recipientSchema = new mongoose.Schema({
     amount2:{
         type: String
     },
-    
+   localCurrency:{
+        type: Number
+    },
 },
 
  )

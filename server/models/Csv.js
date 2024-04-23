@@ -15,14 +15,14 @@ const csvSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: Hash
     },
-    Recipient: {
+    Recipient:[ {
         type: mongoose.Schema.Types.ObjectId,
         ref: Recipient
-    },
-    Currency: {
+    }],
+    Currency:[ {
         type: mongoose.Schema.Types.ObjectId,
         ref: Currency
-    },
+    }],
   
     RecipientData: {
         type: mongoose.Schema.Types.ObjectId,

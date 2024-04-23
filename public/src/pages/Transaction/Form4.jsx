@@ -18,29 +18,58 @@ const Form4 = ({ formData }) => {
   const handleSendData = () => {
     const serverUrl = `${SERVER_URL}/api/addRecipientTransaction`;
 
-    const exchangeData = formData.form4Data.exchangeRates
-      ? Object.values(formData.form4Data.exchangeRates).flatMap(rates => rates.map(rate => ({
-        base_currency: rate.base_currency,
-        quote_currency: rate.quote_currency,
-        rate: rate.rate,
-        time: rate.time,
-        stablecoin: rate.Stablecoin,
-        NCA: rate.NCA
-      })))
-      : [];
-
-    const recipientsData = formData.form5Data.recipients.map((recipient, index) => ({
-      name: recipient.name,
-      org: recipient.organization,
-      wallet: recipient.wallet,
-      comment: recipient.comment,
-      token1: recipient.selectedTokens[0].name,
-      amount1: recipient.selectedTokens[0].amount,
-      token2: recipient.selectedTokens.length > 1 ? recipient.selectedTokens[1].name : undefined,
-      amount2: recipient.selectedTokens.length > 1 ? recipient.selectedTokens[1].amount : undefined
-      // token3:,
-      // amount3:,
-    }));
+    const exchangeData = formData.form4Data.recipients
+    ? formData.form4Data.recipients.flatMap(recipient => {
+        const cryptoData = recipient.cryptoData;
+        return cryptoData.map(data => ({
+          recipien: recipient.name,
+          base_currency: data.token,
+          quote_currency: 'USD', // Assuming quote currency is USD
+          rate: data.cryptoConversionRate,
+          time: new Date().toISOString(), // Assuming current time
+          stablecoin: data.stablecoin, // You need to define where this comes from
+          NCA: data.NCA // You need to define where this comes from
+        }));
+      })
+    : [];
+  
+    const recipientsData = formData.form4Data.recipients.map((recipient, index) => {
+      let token1, amount1, token2, amount2;
+  
+      if (recipient.selectedTokens.length > 0) {
+          token1 = recipient.selectedTokens[0].name;
+          amount1 = recipient.selectedTokens[0].amount;
+          token2 = recipient.selectedTokens.length > 1 ? recipient.selectedTokens[1].name : undefined;
+          amount2 = recipient.selectedTokens.length > 1 ? recipient.selectedTokens[1].amount : undefined;
+      } else if (recipient.cryptoData.length > 0) {
+          token1 = recipient.cryptoData[0].token;
+          amount1 = recipient.cryptoData[0].amount;
+          token2 = recipient.cryptoData.length > 1 ? recipient.cryptoData[1].token : undefined;
+          amount2 = recipient.cryptoData.length > 1 ? recipient.cryptoData[1].amount : undefined;
+      } else {
+          // Handle the case when both selectedTokens and cryptoData are empty
+          token1 = undefined;
+          amount1 = undefined;
+          token2 = undefined;
+          amount2 = undefined;
+      }
+  
+      return {
+          name: recipient.name,
+          org: recipient.organization,
+          wallet: recipient.wallet,
+          comment: recipient.comment,
+          token1,
+          amount1,
+          token2,
+          amount2,
+          localCurrency:recipient.cryptoData[0].finalCurrencyAmount
+          
+          // token3:,
+          // amount3:,
+      };
+  });
+  
 
 
 
@@ -48,11 +77,11 @@ const Form4 = ({ formData }) => {
       transactionName: formData.form2Data.name,
       transactionDescription: formData.form2Data.description,
       recipients: recipientsData,
-      tokenName: formData.form5Data.tokens.map((token) => ({
-        name: token.name,
-        amount: token.amount,
-      })),
-      amount: formData.form5Data.amount,
+      // tokenName: formData.form4Data.tokens.map((token) => ({
+      //   name: token.name,
+      //   amount: token.amount,
+      // })),
+      // amount: formData.form5Data.amount,
       classificationName: formData.form2Data.classification,
       descriptionName: formData.form2Data.description,
       // exchangeRates:formData.form4Data.exchangeRates,

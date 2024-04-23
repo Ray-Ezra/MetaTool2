@@ -13,10 +13,10 @@ const TokenBlacklist = require('../models/TokenBlacklist')
 // @route POST /users
 // @access Private
 const RegisterNewUser = asyncHandler(async (req, res) => {
-    const {email ,password, roles } = req.body
+    const {email ,password } = req.body
 
     // Confirm data
-    if (!email ||!password || !Array.isArray(roles) || !roles.length) {
+    if (!email ||!password) {
         return res.status(400).json({ message: 'All fields are required' })
     }
 
@@ -30,7 +30,7 @@ const RegisterNewUser = asyncHandler(async (req, res) => {
     // Hash password 
     const hashedPwd = await bcrypt.hash(password, 10) // salt rounds
 
-    const userObject = { email, "password": hashedPwd, roles }
+    const userObject = { email, "password": hashedPwd}
 
     // Create and store new user 
     const user = await User.create(userObject)
@@ -41,7 +41,6 @@ const RegisterNewUser = asyncHandler(async (req, res) => {
         res.status(400).json({ message: 'Invalid user data received' })
     }
 })
-
 
 //Login
 

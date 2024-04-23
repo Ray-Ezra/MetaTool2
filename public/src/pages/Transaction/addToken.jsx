@@ -3,44 +3,83 @@ import Select from 'react-select';
 import axios from 'axios';
 
 const AddToken = ({ isOpen, onClose, onSubmit }) => {
-  const [tokens, setTokens] = useState([{ name: '', amount: '', NCA: false, stablecoin: false }]);
+  const [tokens, setTokens] = useState([{ name: '', amount: '', selectedToken: null, selectedCurrency: null, NCA: false, stablecoin: false }]);
   const [tokenOptions, setTokenOptions] = useState([]);
+  const [exchangeRates, setExchangeRates] = useState({});
+  const [currencyOptions, setCurrencyOptions] = useState([]);
 
   useEffect(() => {
     const fetchTokens = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('https://metatool2.onrender.com/api/getCryptos', {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        const response = await axios.get('https://api.coingecko.com/api/v3/simple/price', {
+          params: {
+            ids: 'bitcoin,djed,ethereum,usd-coin,cardano,polkadot,ripple,litecoin,chainlink,stellar,filecoin,tron,tezos,eos,monero,neo,cosmos,vechain,aave,dogecoin,uniswap,theta,fantom,yearn-finance,maker,compound,algorand,ethereum-classic,bitshares,uma,hedera-hashgraph,zcash,elrond,nem,decred,sushiswap,terra-luna,the-graph,pancakeswap,cdai,axie-infinity,loopring,bittorrent-2,trust-wallet-token,huobi-token',
+            vs_currencies: 'usd',
           },
         });
-
-        console.log(response.data); // Check the structure of the data
-
-        if (response.data && response.data.data && Array.isArray(response.data.data)) {
-          const options = response.data.data.map(token => ({
-            value: token.Name,
-            label: token.Name,
-            NCA: token.NCA,
-            stablecoin: token.Stablecoin
-          }));
-          setTokenOptions(options);
-          localStorage.setItem('cryptoData', JSON.stringify(response.data.data))
-        } else {
-          console.error('Unexpected data format:', response.data);
-        }
+    
+        const exchangeRatesData = response.data;
+        setExchangeRates(exchangeRatesData);
+    
+        const tokenInfoResponse = await axios.get('https://api.coingecko.com/api/v3/coins/list');
+        const tokenInfo = tokenInfoResponse.data.reduce((acc, token) => {
+          acc[token.id] = token;
+          return acc;
+        }, {});
+    
+        const options = Object.keys(exchangeRatesData).map(tokenId => {
+          const token = tokenInfo[tokenId];
+          let isStablecoin = false;
+    
+          // Check if the token is a stablecoin based on its name or any other identifier
+          if (['djed', 'usd-coin', 'tether'].includes(tokenId)) {
+            isStablecoin = true;
+          } else if (token && token.categories) {
+            isStablecoin = token.categories.includes('Stablecoins');
+          }
+    
+          return {
+            value: tokenId,
+            label: `${tokenId} - Price: $${exchangeRatesData[tokenId].usd} - ${isStablecoin ? 'Stablecoin' : 'Native cryptocurrency'}`,
+          };
+        });
+    
+        setTokenOptions(options);
       } catch (error) {
-        console.error('Error fetching crypto data:', error);
+        console.error('Error fetching token exchange rates:', error);
       }
     };
+    
 
     fetchTokens();
   }, []);
 
+  useEffect(() => {
+    const fetchCurrencies = async () => {
+      try {
+        const response = await axios.get('https://v6.exchangerate-api.com/v6/739224dbb2df4339cc564344/latest/USD');
+
+        const rates = response.data.conversion_rates;
+
+        const options = Object.entries(rates).map(([currency, rate]) => ({
+          value: currency,
+          label: `${currency} - Rate: ${rate.toFixed(4)}`,
+          rate: rate
+        }));
+
+        setCurrencyOptions(options);
+      } catch (error) {
+        console.error('Error fetching currencies:', error);
+      }
+    };
+
+    fetchCurrencies();
+  }, []);
+
   const handleAddToken = () => {
     if (tokens.length < 5) {
-      setTokens([...tokens, { name: '', amount: '', NCA: false, stablecoin: false }]);
+      const newToken = { name: '', amount: '', selectedToken: null, selectedCurrency: null, NCA: false, stablecoin: false };
+      setTokens([...tokens, newToken]);
     }
   };
 
@@ -50,8 +89,74 @@ const AddToken = ({ isOpen, onClose, onSubmit }) => {
     setTokens(updatedTokens);
   };
 
+  const handleTokenChange = (selectedOption, index) => {
+    const updatedTokens = [...tokens];
+    updatedTokens[index].selectedToken = selectedOption;
+    updatedTokens[index].name = selectedOption.value;
+    setTokens(updatedTokens);
+  };
+
+  const handleAmountChange = (index, amount) => {
+    const updatedTokens = [...tokens];
+    updatedTokens[index].amount = amount;
+    setTokens(updatedTokens);
+  };
+
+  // Inside handleCurrencyChange function
+
+  const handleCurrencyChange = async (selectedOption, index) => {
+    const selectedCurrency = selectedOption.value;
+    const selectedRate = selectedOption.rate;
+  
+    const updatedTokens = [...tokens];
+    updatedTokens[index].selectedCurrency = selectedOption;
+    setTokens(updatedTokens);
+  
+    const cryptoDataArray = [];
+  
+    updatedTokens.forEach((token, tokenIndex) => {
+      if (token.selectedToken && token.selectedToken.value) {
+        const selectedTokenId = token.selectedToken.value;
+        const cryptoConversionRate = exchangeRates[selectedTokenId].usd;
+  
+        const cryptoAmount = parseFloat(token.amount || 0);
+        const cryptoAmountInUSD = cryptoAmount * cryptoConversionRate;
+  
+        const finalAmountInCurrency = cryptoAmountInUSD * selectedRate;
+        const selectedRateUSD = 1 / selectedRate;
+  
+        // Determine if the token is a stablecoin or native cryptocurrency
+        let isStablecoin = false;
+        let isNCA = false;
+        if (['djed', 'usd-coin', 'tether'].includes(selectedTokenId) || token.selectedToken.label.includes('Stablecoin')) {
+          isStablecoin = true;
+        } else {
+          isNCA = true;
+        }
+  
+        const cryptoData = {
+          token: selectedTokenId,
+          amount: cryptoAmount,
+          amountUSD: cryptoAmountInUSD,
+          finalCurrencyAmount: finalAmountInCurrency,
+          finalCurrencyName: selectedCurrency,
+          cryptoConversionRate: cryptoConversionRate,
+          currencyConversionRate: selectedRate,
+          currencyConversionRateUSD: selectedRateUSD,
+          NCA: isNCA,
+          stablecoin: isStablecoin,
+        };
+  
+        cryptoDataArray[tokenIndex] = cryptoData;
+      }
+    });
+  
+    localStorage.setItem('cryptoData', JSON.stringify(cryptoDataArray));
+    console.log('All Tokens calculations:', cryptoDataArray);
+  };
+  
+
   const handleSubmit = () => {
-    const cryptoDat = JSON.parse(localStorage.getItem('cryptoData'))
     onSubmit(tokens);
     onClose();
   };
@@ -64,15 +169,8 @@ const AddToken = ({ isOpen, onClose, onSubmit }) => {
           <div key={index} style={{ marginBottom: '20px' }}>
             <Select
               options={tokenOptions}
-              value={tokenOptions.find(option => option.value === token.name)}
-              onChange={(selectedOption) => {
-                const updatedTokens = [...tokens];
-                updatedTokens[index].name = selectedOption.value;
-                updatedTokens[index].NCA = selectedOption.NCA; // Update NCA value
-                updatedTokens[index].stablecoin = selectedOption.stablecoin;
-                console.log('to:', updatedTokens)
-                setTokens(updatedTokens);
-              }}
+              value={token.selectedToken}
+              onChange={(selectedOption) => handleTokenChange(selectedOption, index)}
               placeholder="Search or Select Token"
               styles={{
                 control: (provided, state) => ({
@@ -91,22 +189,15 @@ const AddToken = ({ isOpen, onClose, onSubmit }) => {
                   ...provided,
                   color: state.isFocused ? '#6B8065' : '#aaa', // Change placeholder color on focus
                 }),
-              }}
-            />
-
+              }}         
+             />
             <input
               type="number"
               value={token.amount}
-              onChange={(e) =>
-                setTokens((prevTokens) =>
-                  prevTokens.map((prevToken, i) =>
-                    i === index ? { ...prevToken, amount: e.target.value } : prevToken
-                  )
-                )
-              }
+              onChange={(e) => handleAmountChange(index, e.target.value)}
               placeholder="Amount"
               style={{
-                width: '72%',
+                width: '95%',
                 padding: '8px',
                 marginTop: '10px',
                 borderRadius: '4px',
@@ -122,17 +213,39 @@ const AddToken = ({ isOpen, onClose, onSubmit }) => {
               onBlur={(e) => {
                 e.target.style.borderColor = '#ccc'; // Reset border color on blur
                 e.target.style.boxShadow = 'none'; // Remove box shadow on blur
-              }}
+              }}  
             />
-
-            <button onClick={() => handleRemoveToken(index)} style={{ marginLeft: '10px', padding: '8px 12px', borderRadius: '4px', backgroundColor: '#f44336', color: '#fff', border: 'none', cursor: 'pointer' }}>Remove</button>
+            <Select
+              options={currencyOptions}
+              value={token.selectedCurrency}
+              onChange={(selectedOption) => handleCurrencyChange(selectedOption, index)}
+              placeholder="Select Currency"
+              styles={{
+                control: (provided, state) => ({
+                  ...provided,
+                  width: '100%',
+                  padding: '8px',
+                  marginTop: '10px',
+                  borderRadius: '4px',
+                  border: '1px solid black',
+                  backgroundColor: 'transparent',
+                  transition: 'border-color 0.3s, box-shadow 0.3s', // Add transition for smooth color change and box shadow
+                  outline: 'none', // Remove default focus outline
+                  boxShadow: state.isFocused ? '0 0 10px 3px #6B8065' : 'none', // Add box shadow on focus
+                }),
+                placeholder: (provided, state) => ({
+                  ...provided,
+                  color: state.isFocused ? '#6B8065' : '#aaa', // Change placeholder color on focus
+                }),
+              }}            />
           </div>
         ))}
+        <button onClick={() => handleRemoveToken(index)} style={{ marginLeft: '10px', padding: '8px 12px', borderRadius: '4px', backgroundColor: '#f44336', color: '#fff', border: 'none', cursor: 'pointer' }}>Remove</button>
         <button onClick={handleAddToken} style={{ marginBottom: '10px', padding: '8px 12px', borderRadius: '4px', backgroundColor: '#4caf50', color: '#fff', border: 'none', cursor: 'pointer' }}>Add Token</button>
         <button onClick={handleSubmit} style={{ padding: '8px 12px', borderRadius: '4px', backgroundColor: '#2196f3', color: '#fff', border: 'none', cursor: 'pointer', marginLeft: '10px' }}>Submit</button>
       </div>
     </div>
   );
-};
+}
 
 export default AddToken;

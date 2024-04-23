@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { SERVER_URL } from '../../../constants';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import { SERVER_URL } from '../../../constants';
+import 'react-toastify/dist/ReactToastify.css';
 
-function LoginForm() {
-  const navigate = useNavigate();
+const SignUp = () => {
+  const [isLoading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [isLoading, setLoading] = useState(false);
+
   const toastOptions = {
     position: 'bottom-right',
     autoClose: 8000,
@@ -21,6 +23,8 @@ function LoginForm() {
     draggable: true,
     theme: 'light',
   };
+
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -34,34 +38,35 @@ function LoginForm() {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true); // Set loading state to true when the form is submitted
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
     try {
-      const response = await fetch(`${SERVER_URL}/auth/Login`, {
+      const response = await fetch(`${SERVER_URL}/auth/Register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
+        body: JSON.stringify(formData),
       });
-      const data = await response.json();
-      if (response.ok) {
-        const { token } = data;
-        localStorage.setItem('token', token);
-        navigate('/home');
-      } else {
-        toast.error(data.message || 'Invalid email or password', toastOptions);
+      console.log(formData)
+      
+      if (!response.ok) {
+        const data = await response.json();
+        setErrorMessage(data.message);
+        return;
       }
+
+      // Success
+      setErrorMessage('');
+      setEmail('');
+      setPassword('');
+      alert('Sign up successful!'); // You can customize this
+      navigate('/')
     } catch (error) {
-      console.error('Error during login:', error);
-      toast.error('Internal Server Error', toastOptions);
-    } finally {
-      setLoading(false);
+      console.error('Error:', error);
+      setErrorMessage('Something went wrong. Please try again.');
     }
   };
 
@@ -71,8 +76,9 @@ function LoginForm() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '20px' }}>
           <img src="/Logo icon 5.png" alt="DirectEd" className="login-icon" width="42px" height="38px" />
           <h2 style={{ color: 'black', marginLeft: '10px', transform: 'translateY(10%)' }}>DirectEd</h2>
+          <a  style={{color:'black', fontWeight:"bold", marginLeft: '10rem'}} href="/">Login</a>
         </div>
-        <h2 style={{ fontSize: '20px', marginBottom: '20px', color: 'black', fontWeight: '600', textAlign: 'left' }}>Login</h2>
+        <h2 style={{ fontSize: '20px', marginBottom: '20px', color: 'black', fontWeight: '600', textAlign: 'left' }}>Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '10px' }}>
             <label htmlFor="email" style={{ display: 'block', marginBottom: '5px', color: 'black', fontWeight: '500' }}>Email Address:</label>
@@ -151,16 +157,11 @@ function LoginForm() {
             </span>
           </div>
 
-          <div>
-            <p style={{color:'black'}}>Don't have an account? <a  style={{color:'black', fontWeight:'bold'}} href="/signup">Sign up</a></p>
-          </div>
-
-          {error && <p style={{ color: 'red', marginTop: '10px', textAlign: 'center' }}>{error}</p>}
           <button type="submit" className="login-button">
             {isLoading ? (
               <div className="spinner"></div>
             ) : (
-              'Login'
+              'Sign Up'
             )}
           </button>
         </form>
@@ -168,6 +169,6 @@ function LoginForm() {
       </div>
     </div>
   );
-}
+};
 
-export default LoginForm;
+export default SignUp;
