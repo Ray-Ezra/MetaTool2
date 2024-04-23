@@ -36,13 +36,29 @@ const Form2 = ({ onNextForm }) => {
     theme: 'light',
   };
 
+  useEffect(() => {
+    // Fetch cryptoData from local storage
+    const cryptoData = JSON.parse(localStorage.getItem('cryptoData'));
+    if (cryptoData) {
+      // Update recipients with cryptoData
+      setRecipients(prevRecipients => {
+        const updatedRecipients = prevRecipients.map(recipient => {
+          return {
+            ...recipient,
+            cryptoData: cryptoData,
+          };
+        });
+        return updatedRecipients;
+      });
+    }
+  }, []);
  
 
   const isNameValid = /^[a-zA-Z]+[a-zA-Z\s]*$/;
   const isWalletValid = /^[a-zA-Z0-9]{25,}$/;
 
   const handleNext = () => {
-    if (recipients.some((recipient) => !recipient.name || !recipient.organization || recipient.selectedTokens.length === 0)) {
+    if (recipients.some((recipient) => !recipient.name || !recipient.organization)) {
       toast.error('All fields are required for each recipient, and at least one token must be selected.', toastOptions);
       return;
     }
@@ -85,7 +101,7 @@ const Form2 = ({ onNextForm }) => {
         }
         return recipient;
       });
-      setTokens(getCombinedTokens(updatedRecipients)); // Update context with combined tokens
+      setTokens(getCombinedTokens(updatedRecipients)); 
       // setSelectedRecipientId(id)
       // console.log('selected:',selectedRecipientId)
       return updatedRecipients;
@@ -161,30 +177,68 @@ const Form2 = ({ onNextForm }) => {
     setTokens(submittedTokens);
     setShowOverlay(false);
   };
-
   const handleAddToken = (recipientId, newToken) => {
-    // const newCryptoData = JSON.parse(localStorage.getItem('cryptoData'));
+    const newCryptoData = JSON.parse(localStorage.getItem('cryptoData'));
     setRecipients(prevRecipients => {
       const updatedRecipients = prevRecipients.map(recipient => {
         if (recipient.id === recipientId) {
-          const updatedTokens = [...recipient.selectedTokens, newToken];
-          // const updatedCryptoData = { ...newCryptoData };
-          return { ...recipient, selectedTokens: updatedTokens, tokenCount: updatedTokens.length,
-            //  cryptoData: updatedCryptoData
-             };
+          let updatedTokens;
+          // Check if no tokens have been selected
+          if (recipient.selectedTokens.length === 0 && newCryptoData) {
+            // If no tokens have been selected and cryptoData is available, use tokens from cryptoData
+            const selectedTokensFromCryptoData = newCryptoData.map(data => ({
+              name: data.name,
+              amount: data.amount,
+            }));
+            updatedTokens = [...selectedTokensFromCryptoData, newToken];
+          } else {
+            // Otherwise, add the new token to the selectedTokens array
+            updatedTokens = [...recipient.selectedTokens, newToken];
+          }
+          return { ...recipient, selectedTokens: updatedTokens, tokenCount: updatedTokens.length };
         }
         return recipient;
       });
-      // updateTokenCount(recipientId)
       return updatedRecipients;
     });
   };
+  
+  
+
+  // const handleAddToken = (recipientId, newToken) => {
+  //   // const newCryptoData = JSON.parse(localStorage.getItem('cryptoData'));
+  //   setRecipients(prevRecipients => {
+  //     const updatedRecipients = prevRecipients.map(recipient => {
+  //       if (recipient.id === recipientId) {
+  //         const updatedTokens = [...recipient.selectedTokens, newToken];
+  //         // const updatedCryptoData = { ...newCryptoData };
+  //         return { ...recipient, selectedTokens: updatedTokens, tokenCount: updatedTokens.length,
+  //           //  cryptoData: updatedCryptoData
+  //            };
+  //       }
+  //       return recipient;
+  //     });
+  //     // updateTokenCount(recipientId)
+  //     return updatedRecipients;
+  //   });
+  // };
   console.log('s:', selectedRecipientId)
 
   const handleCSVSubmit = (formData) => {
-    // Process formData as needed
-    console.log('CSV Details:', formData);
+    setRecipients(prevRecipients => {
+      const updatedRecipients = prevRecipients.map(recipient => {
+        if (recipient.id === selectedRecipientId) {
+          return { 
+            ...recipient, 
+            cryptoData: formData, // Update recipient's cryptoData
+          };
+        }
+        return recipient;
+      });
+      return updatedRecipients;
+    });
   };
+  
 
   
   return (
@@ -331,12 +385,7 @@ const Form2 = ({ onNextForm }) => {
           onClose={() => setShowOverlay(false)}
         />
       )}
-      {showCSVModal && <CSVDetailsModal onClose={() => setShowCSVModal(false)} onSubmit={(formData) => {
-        setCsvCurrencyName(formData.currencyName);
-        setCsvAmount(formData.amount);
-        setCsvRate(formData.rate);
-        setShowCSVModal(false);
-      }} />}
+      {showCSVModal && <CSVDetailsModal onClose={() => setShowCSVModal(false)} onSubmit={handleCSVSubmit} />}
       <ToastContainer />
       <div>
         <button type="button" onClick={addRecipient} style={{ width: '100%', border: '1px dotted black', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>

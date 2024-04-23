@@ -96,22 +96,58 @@ const CurrencyConverter = ({ onClose, onSubmit }) => {
   const convertToCryptocurrency = () => {
     if (selectedToken && conversionResult) {
       const cryptoConversionRate = exchangeRates[selectedToken.value].usd;
-      const finalAmountInCrypto = conversionResult * cryptoConversionRate;
+      const finalAmountInCrypto = conversionResult / cryptoConversionRate;
       setConvertedAmount(finalAmountInCrypto.toFixed(6)); // Display the converted amount in selected cryptocurrency
     }
   };
 
+  let isStablecoin = false;
+  let isNCA = false;
+  if (selectedToken && (['djed', 'usd-coin', 'tether'].includes(selectedToken.value) || selectedToken.label.includes('Stablecoin'))) {
+    isStablecoin = true;
+  } else {
+    isNCA = true;
+  }
+  // const cryptoDataObject = {
+  //   token: selectedToken.value,
+  //   amount: finalAmountInCrypto,
+  //   amountUSD: conversionResult,
+  //   finalCurrencyAmount: amount,
+  //   finalCurrencyName: selectedCurrency.value,
+  //   cryptoConversionRate: cryptoConversionRate,
+  //   currencyConversionRate: selectedCurrency.rate,
+  //   currencyConversionRateUSD: 1 / selectedCurrency.rate,
+  //   NCA: false, // Add your logic to determine if it's NCA
+  //   stablecoin: false, // Add your logic to determine if it's a stablecoin
+  // };
+
+  // setCryptoData([cryptoDataObject]);
+
   const handleSubmit = () => {
     if (convertedAmount) {
+
+
       const formData = {
-        currencyName: selectedCurrency.value,
-        amount: amount,
+        finalCurrencyName: selectedCurrency.value,
+        finalCurrencyAmount: amount,
         amountUSD: conversionResult,
-        selectedCryptocurrency: selectedToken.value,
-        amountCrypto: convertedAmount
+        token: selectedToken.value,
+        amount: convertedAmount,
+        cryptoConversionRate:exchangeRates[selectedToken.value].usd,
+        currencyConversionRate: selectedCurrency.rate,
+        currencyConversionRateUSD: 1/selectedCurrency.rate,
+        NCA: isNCA,
+        stablecoin: isStablecoin,
+
       };
-      onSubmit(formData); // Pass CSV details to the onSubmit function
-      localStorage.setItem('cryptoData', JSON.stringify(formData)); // Store data in local storage
+      // onSubmit();
+      localStorage.removeItem('cryptoData')
+      let cryptoData = []; 
+
+    cryptoData.push(formData); 
+
+    localStorage.setItem('cryptoData', JSON.stringify(cryptoData)); // Pass CSV details to the onSubmit function
+      // localStorage.setItem('cryptoData', JSON.stringify(formData)); // Store data in local storage
       console.log(formData)
       onClose(); // Close the overlay
     }

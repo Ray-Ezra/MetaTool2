@@ -83,11 +83,12 @@ function Table() {
               <tr key={index} onClick={() => handleRowClick((currentPage - 1) * transactionsPerPage + index)} className="clickable-row" style={{ height: '50px' }}>
                 <td>{transaction?.transactionName || '{...}'}</td>
                 <td>
-  {transaction?.recipients?.length > 0 && (
-    <>
-      {transaction.recipients.map((recipient) => recipient.name).join(', ')}
-    </>
-  )}
+                {transaction && transaction?.recipients && transaction.recipients.length > 0 && (
+  <>
+    {transaction.recipients.map((recipient) => recipient.name).join(', ')}
+  </>
+)}
+
 </td>
                 {/* <td>{transaction?.token || '{...}'}</td> */}
                 <td>{transaction?.classification.classificationName || '{...}'}</td>

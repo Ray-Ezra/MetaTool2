@@ -104,7 +104,7 @@ const formDataFromForm4 = JSON.parse(localStorage.getItem('formDataFromForm4'));
   
       item.Currency.forEach(currency => {
         const CurrencyName = currency ? currency.localCurrencyName || '' : '';
-        // const CurrencyAmount = currency ? currency.localCurrencyAmount || '' : '';
+        const CurrencyAmount = currency ? currency.localCurrencyAmount || '' : '';
         const currencyUsd = currency ? currency.localCurrencyUsdRate || '' : '';
         const totalUSD = currency ? currency.localCurrencyUsdAmount || '' : '';
   
@@ -140,8 +140,7 @@ const formDataFromForm4 = JSON.parse(localStorage.getItem('formDataFromForm4'));
         });
   
         recipientDataMap.forEach((recipientInfo, recipientName) => {
-          if (matchingRecipient) {
-            const CurrencyAmount = matchingRecipient.cryptoData[0].finalCurrencyAmount || '';
+
 
           // Construct row data for each recipient
           const rowData = [
@@ -187,7 +186,7 @@ const formDataFromForm4 = JSON.parse(localStorage.getItem('formDataFromForm4'));
           }
   
           rows.push(rowData);
-          }
+          
         });
       });
     });

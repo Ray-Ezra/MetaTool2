@@ -33,19 +33,41 @@ const Form4 = ({ formData }) => {
       })
     : [];
   
-
-    const recipientsData = formData.form4Data.recipients.map((recipient, index) => ({
-      name: recipient.name,
-      org: recipient.organization,
-      wallet: recipient.wallet,
-      comment: recipient.comment,
-      token1: recipient.selectedTokens[0].name,
-      amount1: recipient.selectedTokens[0].amount,
-      token2: recipient.selectedTokens.length > 1 ? recipient.selectedTokens[1].name : undefined,
-      amount2: recipient.selectedTokens.length > 1 ? recipient.selectedTokens[1].amount : undefined
-      // token3:,
-      // amount3:,
-    }));
+    const recipientsData = formData.form4Data.recipients.map((recipient, index) => {
+      let token1, amount1, token2, amount2;
+  
+      if (recipient.selectedTokens.length > 0) {
+          token1 = recipient.selectedTokens[0].name;
+          amount1 = recipient.selectedTokens[0].amount;
+          token2 = recipient.selectedTokens.length > 1 ? recipient.selectedTokens[1].name : undefined;
+          amount2 = recipient.selectedTokens.length > 1 ? recipient.selectedTokens[1].amount : undefined;
+      } else if (recipient.cryptoData.length > 0) {
+          token1 = recipient.cryptoData[0].token;
+          amount1 = recipient.cryptoData[0].amount;
+          token2 = recipient.cryptoData.length > 1 ? recipient.cryptoData[1].token : undefined;
+          amount2 = recipient.cryptoData.length > 1 ? recipient.cryptoData[1].amount : undefined;
+      } else {
+          // Handle the case when both selectedTokens and cryptoData are empty
+          token1 = undefined;
+          amount1 = undefined;
+          token2 = undefined;
+          amount2 = undefined;
+      }
+  
+      return {
+          name: recipient.name,
+          org: recipient.organization,
+          wallet: recipient.wallet,
+          comment: recipient.comment,
+          token1,
+          amount1,
+          token2,
+          amount2
+          // token3:,
+          // amount3:,
+      };
+  });
+  
 
 
 
@@ -53,10 +75,10 @@ const Form4 = ({ formData }) => {
       transactionName: formData.form2Data.name,
       transactionDescription: formData.form2Data.description,
       recipients: recipientsData,
-      tokenName: formData.form4Data.tokens.map((token) => ({
-        name: token.name,
-        amount: token.amount,
-      })),
+      // tokenName: formData.form4Data.tokens.map((token) => ({
+      //   name: token.name,
+      //   amount: token.amount,
+      // })),
       // amount: formData.form5Data.amount,
       classificationName: formData.form2Data.classification,
       descriptionName: formData.form2Data.description,
