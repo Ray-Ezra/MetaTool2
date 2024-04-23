@@ -156,7 +156,7 @@ const CurrencyConverter = ({ onClose, onSubmit }) => {
   return (
     <div className="overlay" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: '#f2eee3', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <div className="payment-form" style={{ backgroundColor: '#F2EEE3', padding: '20px', borderRadius: '10px', color: 'black', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)', width: '80%', maxWidth: '400px' }}>
-        <h2>Currency Converter</h2>
+        <h2 >Local Currency</h2>
         <div>
           <Select
             options={currencyOptions}
@@ -218,7 +218,7 @@ const CurrencyConverter = ({ onClose, onSubmit }) => {
           }}>Convert</button>
           {conversionResult && (
             <div>
-              <p>Converted Amount in USD: ${conversionResult}</p>
+              <p>Amount in USD: ${conversionResult}</p>
               <Select
                 options={tokenOptions}
                 value={selectedToken}
@@ -277,7 +277,7 @@ const CurrencyConverter = ({ onClose, onSubmit }) => {
         </div>
         {convertedAmount && (
           <div>
-            <p>Converted Amount in Selected Cryptocurrency: {convertedAmount}</p>
+            <p>Amount to be sent in Selected Cryptocurrency: {convertedAmount}</p>
           </div>
         )}
       </div>

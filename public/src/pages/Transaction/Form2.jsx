@@ -346,11 +346,11 @@ const Form2 = ({ onNextForm }) => {
                 {recipient.tokenCount}
               </div>
               <button className="addicon1" type="button" onClick={() => setShowOverlay(true)} style={{ padding: '8px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '10px', cursor: 'pointer', transform: 'translateY(4%)' }}>
-                Add Token
+                Crypto
               </button>
             </div>
             <div className="token-info" style={{ display: 'flex', transform: 'translateX(-60%)', alignItems: 'center', justifyContent: 'flex-start', marginBottom: '8px', width: '6rem', borderRadius: '10px', padding: '2px' }}>
-              <button onClick={() => setShowCSVModal(true)} style={{ padding: '8px', marginLeft: '4px', borderRadius: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', cursor: 'pointer' }}>CSV Details</button>
+              <button onClick={() => setShowCSVModal(true)} style={{ padding: '8px', marginLeft: '4px', borderRadius: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', cursor: 'pointer' }}>Local Currency</button>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2px' }}>
