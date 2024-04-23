@@ -338,8 +338,8 @@ const formDataFromForm4 = JSON.parse(localStorage.getItem('formDataFromForm4'));
             >
               Download CSV file
             </button>
-            <NavLink
-              to="/home"
+            <a
+              href="/home"
               className="homepage-button"
               style={{
                 backgroundColor: '#6B8065',
@@ -360,7 +360,7 @@ const formDataFromForm4 = JSON.parse(localStorage.getItem('formDataFromForm4'));
               onMouseUp={(e) => e.target.style.transform = 'scale(1)'} // Reset scale when click released
             >
               Go to Homepage
-            </NavLink>
+            </a>
 
           </>
         )}
