@@ -26,7 +26,7 @@ const Form6 = ({ formData }) => {
 
   const handleSubmitData = (e) => {
     e.preventDefault();
-    const serverUrl = `http://localhost:4000/api/addDetails`;
+    const serverUrl = `https://metatool2-2.onrender.com/api/addDetails`;
     const recipients = formDataFromForm4.form4Data.recipients;
 
     const sendData = recipients.flatMap(recipient => {
