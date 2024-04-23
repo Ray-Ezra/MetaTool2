@@ -1,6 +1,6 @@
 #TRANSACTION REQUEST 
 
-POST https://metatool2-2.onrender.com/api/addRecipientTransaction
+POST https://metatool2.onrender.com/api/addRecipientTransaction
 Content-Type: application/json
 
 {
