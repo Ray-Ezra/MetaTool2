@@ -151,9 +151,9 @@ function LoginForm() {
             </span>
           </div>
 
-          <div>
+          {/* <div>
             <p style={{color:'black'}}>Don't have an account? <a  style={{color:'black', fontWeight:'bold'}} href="/signup">Sign up</a></p>
-          </div>
+          </div> */}
 
           {error && <p style={{ color: 'red', marginTop: '10px', textAlign: 'center' }}>{error}</p>}
           <button type="submit" className="login-button">
