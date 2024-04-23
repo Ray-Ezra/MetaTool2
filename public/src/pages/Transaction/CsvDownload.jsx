@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { SERVER_URL } from '../../../constants';
 import Papa from 'papaparse';
 import animationData from '../../../public/load.json';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 
 const defaultOptions = {
   loop: true,

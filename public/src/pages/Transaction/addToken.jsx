@@ -152,7 +152,7 @@ const AddToken = ({ isOpen, onClose, onSubmit }) => {
     });
   
     localStorage.setItem('cryptoData', JSON.stringify(cryptoDataArray));
-    console.log('All Tokens calculations:', cryptoDataArray);
+    // console.log('All Tokens calculations:', cryptoDataArray);
   };
   
 

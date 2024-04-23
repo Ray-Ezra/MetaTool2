@@ -148,7 +148,7 @@ const CurrencyConverter = ({ onClose, onSubmit }) => {
 
     localStorage.setItem('cryptoData', JSON.stringify(cryptoData)); // Pass CSV details to the onSubmit function
       // localStorage.setItem('cryptoData', JSON.stringify(formData)); // Store data in local storage
-      console.log(formData)
+      // console.log(formData)
       onClose(); // Close the overlay
     }
   };
