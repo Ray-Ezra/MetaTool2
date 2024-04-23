@@ -112,11 +112,13 @@ const formDataFromForm4 = JSON.parse(localStorage.getItem('formDataFromForm4'));
         const recipientDataMap = new Map();
   
         recipientsData.forEach(recipient => {
-          const recipientName = recipient.name || ''; // Get recipient's name
+          const recipientName = recipient.name || '';
+          const localCurrency = recipient.localCurrency || ''; // Get recipient's name
     
   
           if (!recipientDataMap.has(recipientName)) {
             recipientDataMap.set(recipientName, {
+              localCurrency:localCurrency,
               stablecoin: [],
               NCA: [],
             });
@@ -148,7 +150,8 @@ const formDataFromForm4 = JSON.parse(localStorage.getItem('formDataFromForm4'));
             wallet,
             recipientName,
             CurrencyName,
-            CurrencyAmount,
+            // CurrencyAmount,
+            recipientInfo.localCurrency,
             currencyUsd,
             totalUSD,
             '', // Initialize stablecoin field

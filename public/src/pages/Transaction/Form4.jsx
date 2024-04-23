@@ -62,7 +62,9 @@ const Form4 = ({ formData }) => {
           token1,
           amount1,
           token2,
-          amount2
+          amount2,
+          localCurrency:recipient.cryptoData[0].finalCurrencyAmount
+          
           // token3:,
           // amount3:,
       };

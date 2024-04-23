@@ -37,7 +37,7 @@ router.get('/details',authToken ,  async (req, res, next) => {
                 select: 'exchangeRates recipients ',
                 populate: {
                     path: 'recipients',
-                    select: 'name'
+                    select: 'name localCurrency'
                 },
                 
             })
