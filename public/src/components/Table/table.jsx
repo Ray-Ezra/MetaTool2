@@ -26,7 +26,7 @@ function Table() {
 
         if (response.ok) {
           const transactionD = await response.json();
-          console.log('Transactions from API:', transactionD);
+          //console.log('Transactions from API:', transactionD);
           const transactions = transactionD.transactions;
           updateTransactions(transactions);
           setDataLoaded(true);
@@ -44,7 +44,7 @@ function Table() {
   const handleRowClick = (index) => {
     const selected = transactions[index];
     setSelectedTransaction(selected);
-    console.log('Download action for index:', index);
+    //console.log('Download action for index:', index);
     navigate(`/download/${index}`);
   };
 

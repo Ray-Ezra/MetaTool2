@@ -22,7 +22,7 @@ const TransactionForm = () => {
   };
 
   const handleSubmitData = () => {
-    console.log('Sending Data to server')
+    //console.log('Sending Data to server')
     e.preventDefault();
     const serverUrl =  `https://metatool2.onrender.com/api/addDetails`
     const sendData = {
@@ -39,15 +39,15 @@ const TransactionForm = () => {
     axios
     .post(serverUrl, sendData, axiosConfig)
     .then((response) => {
-      console.log('Server response:', response.data)
+      //console.log('Server response:', response.data)
     })
     .catch((error) => {
       console.error('Error sending data to the server:', error)
     });
 
-    // console.log('TxHash:', txHash);
-    // console.log('Address:', address);
-    // console.log('Transaction Fee:', txFee);
+    // //console.log('TxHash:', txHash);
+    // //console.log('Address:', address);
+    // //console.log('Transaction Fee:', txFee);
   };
 
   return (

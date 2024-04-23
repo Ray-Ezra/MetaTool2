@@ -15,7 +15,7 @@ const FormDisplay = () => {
   });
 
   const handleNextForm = (nextForm, data) => {
-    console.log(`Received form${nextForm} data:`, data);
+    //console.log(`Received form${nextForm} data:`, data);
     setFormData((prevData) => ({
       ...prevData,
       [`form${nextForm}Data`]: data,

@@ -8,7 +8,7 @@ const Form5 = ({ onNextForm }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [exchangeRates, setExchangeRates] = useState({});
   const cryptoData = JSON.parse(localStorage.getItem('cryptoData'))
-  console.log(cryptoData)
+  //console.log(cryptoData)
   const toastOptions = {
     position: "bottom-right",
     autoClose: 8000,

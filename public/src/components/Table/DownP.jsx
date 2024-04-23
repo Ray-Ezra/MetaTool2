@@ -7,7 +7,7 @@ import './DownP.css';
 function DownloadPage() {
   const navigate = useNavigate();
   const { index } = useParams();
-  console.log('index:', index)
+  // //console.log('index:', index)
   const [downloadLink, setDownloadLink] = useState(null);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
@@ -25,13 +25,13 @@ function DownloadPage() {
 
         if (response.ok) {
           const data = await response.json();
-          console.log('data:', data);
+          //console.log('data:', data);
 
           const transaction = data.transactions[index];
-          console.log('selectedTransaction:', transaction)
+          //console.log('selectedTransaction:', transaction)
 
         const newDownloadLink = data.downloadLink;
-        console.log('newDownloadLink:', newDownloadLink);
+        //console.log('newDownloadLink:', newDownloadLink);
 
           setDownloadLink(newDownloadLink);
           setSelectedTransaction(transaction)
@@ -58,7 +58,7 @@ function DownloadPage() {
       }
 
       const selectedTransactionId = selectedTransaction._id
-      console.log('selectedTransactionId:', selectedTransactionId);
+      //console.log('selectedTransactionId:', selectedTransactionId);
   
       // Fetch the download link with the Authorization header
       const response = await fetch(`${SERVER_URL}/api${downloadLink}/${selectedTransactionId}`, {

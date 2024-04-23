@@ -50,7 +50,7 @@ const SignUp = () => {
         },
         body: JSON.stringify(formData),
       });
-      console.log(formData)
+      //console.log(formData)
       
       if (!response.ok) {
         const data = await response.json();

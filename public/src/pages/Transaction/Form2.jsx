@@ -25,7 +25,7 @@ const Form2 = ({ onNextForm }) => {
   const [csvAmount, setCsvAmount] = useState(0);
   const [csvRate, setCsvRate] = useState(0);
   const cryptoData = JSON.parse(localStorage.getItem('cryptoData'))
-  console.log(cryptoData)
+  //console.log(cryptoData)
 
 
   const toastOptions = {
@@ -64,7 +64,7 @@ const Form2 = ({ onNextForm }) => {
     }
 
     if (recipients.every((recipient) => isNameValid.test(recipient.name) && isWalletValid.test(recipient.wallet))) {
-      console.log('Form2 Data:', recipients);
+      //console.log('Form2 Data:', recipients);
       const formData = {
         recipients: recipients,
         tokens: initialTokens.map((token) => ({
@@ -103,7 +103,7 @@ const Form2 = ({ onNextForm }) => {
       });
       setTokens(getCombinedTokens(updatedRecipients)); 
       // setSelectedRecipientId(id)
-      // console.log('selected:',selectedRecipientId)
+      // //console.log('selected:',selectedRecipientId)
       return updatedRecipients;
     });
   };
@@ -139,7 +139,7 @@ const Form2 = ({ onNextForm }) => {
   const handleTokenClick = (recipientId) => {
     setShowTokenTable(!showTokenTable);
     setSelectedRecipientId(recipientId);
-    console.log('selected:', recipientId);
+    //console.log('selected:', recipientId);
   };
 
   // Function to close the token table
@@ -222,7 +222,7 @@ const Form2 = ({ onNextForm }) => {
   //     return updatedRecipients;
   //   });
   // };
-  console.log('s:', selectedRecipientId)
+  //console.log('s:', selectedRecipientId)
 
   const handleCSVSubmit = (formData) => {
     setRecipients(prevRecipients => {

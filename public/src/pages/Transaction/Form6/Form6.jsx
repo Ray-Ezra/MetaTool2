@@ -9,7 +9,7 @@ const Form6 = ({ formData }) => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const formDataFromForm4 = JSON.parse(localStorage.getItem('formDataFromForm4'));
-   console.log('this:',formDataFromForm4)
+   //console.log('this:',formDataFromForm4)
   const recipients = formDataFromForm4.form4Data.recipients
 
   const handleTxHashChange = (e) => {
@@ -54,7 +54,7 @@ const Form6 = ({ formData }) => {
     axios
       .post(serverUrl, sendData, axiosConfig)
       .then((response) => {
-        console.log('Server response:', response.data);
+        //console.log('Server response:', response.data);
         navigate('/downloadcsv');
       })
       .catch((error) => {

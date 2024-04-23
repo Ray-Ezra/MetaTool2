@@ -7,8 +7,8 @@ import SuccessPage from '../Success/Success.jsx';
 import './Form4.css';
 
 const Form4 = ({ formData, csvDetails }) => {
-  console.log('Received formData:', formData);
-  console.log('Received csvDetails:', csvDetails);
+  //console.log('Received formData:', formData);
+  //console.log('Received csvDetails:', csvDetails);
 
   const { updateTransactions } = useAppContext();
   const [successData, setSuccessData] = useState(null);
@@ -17,8 +17,8 @@ const Form4 = ({ formData, csvDetails }) => {
   const token = localStorage.getItem('token');
 
   const handleSendData = () => {
-    console.log('Sending data to the server...');
-    console.log('FormData to be sent:', formData); 
+    //console.log('Sending data to the server...');
+    //console.log('FormData to be sent:', formData); 
 
     const serverUrl = `${SERVER_URL}/api/addRecipientTransaction`;
 
@@ -55,7 +55,7 @@ const Form4 = ({ formData, csvDetails }) => {
     axios
       .post(serverUrl, requestData, axiosConfig)
       .then((response) => {
-        console.log('Server response:', response.data);
+        //console.log('Server response:', response.data);
         updateTransactions(response.data.recipientData);
         setIsSuccess(true);
         setTokens([{ name: '', amount: 0 }])

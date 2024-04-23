@@ -50,7 +50,7 @@ router.get('/details',authToken ,  async (req, res, next) => {
 });
 
 router.post('/addDetails', authToken, async (req, res, next) => {
-    console.log('DATA:', req.body);
+    //console.log('DATA:', req.body);
     try {
         const loggedInUser = req.user;
         const dataArray = req.body; // Assuming the array is named DATA
@@ -109,7 +109,7 @@ router.post('/addDetails', authToken, async (req, res, next) => {
 
 
 // router.post('/addDetails',authToken , async (req, res, next) => {
-//     console.log('DATA:',req.body)
+//     //console.log('DATA:',req.body)
 //     try{
 //         const loggedInUser = req.user
 //         const {

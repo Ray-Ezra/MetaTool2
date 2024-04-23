@@ -32,7 +32,7 @@ const Form1 = ({ onNextForm }) => {
         classification,
       };
 
-      console.log('Form1 Data:', formData)
+      //console.log('Form1 Data:', formData)
       onNextForm(2, formData);
     } else {
       toast.error('Please fill in all fields.', toastOptions);

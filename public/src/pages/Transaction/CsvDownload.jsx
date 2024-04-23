@@ -32,7 +32,7 @@ const CsvDetails = () => {
         throw new Error(`API request failed with status ${response.status}`);
       }
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
 
       if (data.success) {
         const csvData = processDataForCsv(data.verifiedData);

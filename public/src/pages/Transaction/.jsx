@@ -16,7 +16,7 @@ const AddToken = ({ isOpen, onClose, onSubmit }) => {
           },
         });
 
-        console.log(response.data); // Check the structure of the data
+        //console.log(response.data); // Check the structure of the data
 
         if (response.data && response.data.data && Array.isArray(response.data.data)) {
           const options = response.data.data.map(token => ({
@@ -70,7 +70,7 @@ const AddToken = ({ isOpen, onClose, onSubmit }) => {
                 updatedTokens[index].name = selectedOption.value;
                 updatedTokens[index].NCA = selectedOption.NCA; // Update NCA value
                 updatedTokens[index].stablecoin = selectedOption.stablecoin;
-                console.log('to:', updatedTokens)
+                //console.log('to:', updatedTokens)
                 setTokens(updatedTokens);
               }}
               placeholder="Search or Select Token"

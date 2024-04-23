@@ -16,7 +16,7 @@ const writeFile = util.promisify(fs.writeFile)
 
 const NewTransactionController= {
     addRecipientTransaction: async (req, res) => {
-        console.log('Controller received request:', req.body)
+        //console.log('Controller received request:', req.body)
         try {
 
             const { //transactionName,transactionDescription ,
@@ -71,7 +71,7 @@ const NewTransactionController= {
 },
  getRecipientData:  async (req, res) => {
     try {
-     console.log('Logged-in User:', req.user)
+     //console.log('Logged-in User:', req.user)
       const loggedInUser = req.user;
   
       // Fetch recipient data associated with the logged-in user from the database
@@ -118,23 +118,23 @@ const NewTransactionController= {
 
   downloadRData: async (req, res) => {
     try {
-      console.log('Request Params:', req.params);
+      //console.log('Request Params:', req.params);
      
       const loggedInUser = req.user;
       const selectedTransctionId = req.params.selectedTransctionId
-      console.log('Id :',selectedTransctionId)
+      //console.log('Id :',selectedTransctionId)
 
       const userRecipientData = await RecipientsData.findById(selectedTransctionId);
-    console.log(userRecipientData)
+    //console.log(userRecipientData)
 
       const jsonData = JSON.stringify({ success: true, transactions: userRecipientData });
-      console.log(jsonData)  
+      //console.log(jsonData)  
 
       // Create a unique filename for the downloaded file
       const filename = `recipient_data_${loggedInUser._id}_${Date.now()}.json`;
   
       const filePath = path.join(__dirname, 'downloads', filename);
-       console.log(filePath)
+       //console.log(filePath)
        if (!fs.existsSync(path.join(__dirname, 'downloads'))) {
         fs.mkdirSync(path.join(__dirname, 'downloads'));
     }
@@ -159,7 +159,7 @@ const NewTransactionController= {
   },
   
   addHash: async (req, res) => {
-  console.log("req:", req.body)
+  //console.log("req:", req.body)
     try {
       const loggedInUser = req.user;
       const {TXHash, wallet } = req.body;
@@ -228,10 +228,10 @@ res.status(500).json({ error: 'Internal Server Error' });
 
   /*downloadRData: async (req, res) => {
     try {
-      console.log('req:',req.body)
+      //console.log('req:',req.body)
       const loggedInUser = req.user;
       const selectedTransactionId = req.params.id; // Use the same parameter name as in getDataById
-      console.log('id:',selectedTransactionId)
+      //console.log('id:',selectedTransactionId)
 
       // Check if the selectedTransactionId is a valid ObjectId
       if (!mongoose.Types.ObjectId.isValid(selectedTransactionId)) {
@@ -245,7 +245,7 @@ res.status(500).json({ error: 'Internal Server Error' });
       }
   
       const jsonData = JSON.stringify({ success: true, transactions: userRecipientData });
-      console.log('JD:',jsonData)
+      //console.log('JD:',jsonData)
       const filename = `recipient_data_${loggedInUser._id}_${Date.now()}.json`;
   
       const filePath = path.join(__dirname, 'downloads', filename);
