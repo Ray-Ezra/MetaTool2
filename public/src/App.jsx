@@ -9,6 +9,7 @@ import CsvDownload from './pages/Transaction/CsvDownload'
 import Navbar from './components/Navbar/Navbar'
 import SignUp from './pages/signup/signup'
 import './App.css'
+import VerificationAccount from './pages/test/ver'
 
 
 
@@ -25,6 +26,7 @@ const App = () => {
       <Route path='/form6' element={<Form6/>}></Route>
       <Route path='/download/:index' element={<DownloadPage/>}></Route>
       <Route path='/downloadcsv' element={<CsvDownload/>}></Route>
+      <Route path='/verify' element={<VerificationAccount/>}></Route>
     </Routes> 
     </>
 

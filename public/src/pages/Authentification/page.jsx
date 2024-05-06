@@ -4,16 +4,20 @@ import { SERVER_URL } from '../../../constants';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import VerificationAccount from '../test/ver'; // Import the VerificationAccount component
 
 function LoginForm() {
   const navigate = useNavigate();
+
+  // State variables
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [otpGenerated, setOtpGenerated] = useState(false);
+  const [otp, setOtp] = useState('');
   const toastOptions = {
     position: 'bottom-right',
     autoClose: 8000,
@@ -22,6 +26,7 @@ function LoginForm() {
     theme: 'light',
   };
 
+  // Handle input change
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
@@ -30,50 +35,54 @@ function LoginForm() {
     });
   };
 
+  // Toggle password visibility
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true); // Set loading state to true when the form is submitted
+  // Handle OTP generation and display OTP verification overlay
+  const handleGenerateOTP = async () => {
+    const { email } = formData;
+
+    if (!email) {
+      toast.error('Please provide your email to generate OTP', toastOptions);
+      return;
+    }
 
     try {
-      const response = await fetch(`${SERVER_URL}/auth/Login`, {
+      // Simulate OTP generation logic (replace with actual server call)
+      const response = await fetch(`${SERVER_URL}/auth/generateOTP`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
+        body: JSON.stringify({ email }),
       });
-      const data = await response.json();
+
       if (response.ok) {
-        const { token } = data;
-        localStorage.setItem('token', token);
-        navigate('/home');
+        const { otp } = await response.json();
+        setOtp(otp);
+        setOtpGenerated(true);
       } else {
-        toast.error(data.message || 'Invalid email or password', toastOptions);
+        toast.error('Failed to generate OTP. Please try again.', toastOptions);
       }
     } catch (error) {
-      console.error('Error during login:', error);
-      toast.error('Internal Server Error', toastOptions);
-    } finally {
-      setLoading(false);
+      console.error('Error generating OTP:', error);
+      toast.error('Failed to generate OTP. Please try again.', toastOptions);
     }
+  };
+
+  // Handle successful OTP verification (called from VerificationAccount component)
+  const handleOTPVerificationSuccess = () => {
+    navigate('/home'); // Redirect to home page after successful OTP verification
   };
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '90vh' }}>
       <div style={{ backgroundColor: '#f2eee3', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)', width: '400px', padding: '20px', borderRadius: '10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '20px' }}>
-          <img src="/Logo icon 5.png" alt="DirectEd" className="login-icon" width="42px" height="38px" />
-          <h2 style={{ color: 'black', marginLeft: '10px', transform: 'translateY(10%)' }}>DirectEd</h2>
-        </div>
         <h2 style={{ fontSize: '20px', marginBottom: '20px', color: 'black', fontWeight: '600', textAlign: 'left' }}>Login</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => e.preventDefault()}>
+          {/* Email input */}
           <div style={{ marginBottom: '10px' }}>
             <label htmlFor="email" style={{ display: 'block', marginBottom: '5px', color: 'black', fontWeight: '500' }}>Email Address:</label>
             <input
@@ -92,27 +101,13 @@ function LoginForm() {
                 background: 'transparent',
                 transition: 'border-color 0.3s, box-shadow 0.3s', 
                 outline: 'none',
-                borderLeft: 'none', 
-                borderTop: 'none', 
-                borderRight: 'none', 
-              }}
-              onFocus={(e) => {
-                e.target.style.borderBottom = '2px solid #6B8065'; 
-                e.target.style.boxShadow = '0 2px 10px 3px #6B8065';
-              }}
-              onBlur={(e) => {
-                e.target.style.borderBottom = '2px solid black'; 
-                e.target.style.boxShadow = 'none'; 
               }}
             />
-
           </div>
 
-          <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+          {/* Password input with toggle visibility */}
+          <div style={{ marginBottom: '10px' }}>
             <label htmlFor="password" style={{ display: 'block', color: 'black', fontWeight: '500' }}>Password:</label>
-          </div>
-
-          <div style={{ position: 'relative' }}>
             <input
               type={showPassword ? 'text' : 'password'}
               id="password"
@@ -123,45 +118,37 @@ function LoginForm() {
               style={{
                 width: '100%',
                 padding: '10px',
-                border: 'none',
                 borderBottom: '2px solid black', 
                 borderRadius: '0px',
                 boxSizing: 'border-box',
-                background: 'transparent', 
-                transition: 'border-bottom-color 0.3s',
+                background: 'transparent',
+                transition: 'border-color 0.3s, box-shadow 0.3s', 
                 outline: 'none',
-                boxShadow: 'none',
-              }}
-              onFocus={(e) => {
-                e.target.style.borderBottomColor = '#6B8065'; 
-                e.target.style.boxShadow = '0 0 10px 3px #6B8065';
-              }}
-              onBlur={(e) => {
-                e.target.style.borderBottom = '2px solid black'; 
-                e.target.style.boxShadow = 'none'; // Remove glow effect on blur
               }}
             />
-
-            <span
-              onClick={handleTogglePassword}
-              style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)', cursor: 'pointer', color: 'black', }}
-              title={showPassword ? 'Hide password' : 'Show password'}
-            >
+            <span onClick={handleTogglePassword} style={{ cursor: 'pointer', color: 'black' }}>
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
           </div>
 
-          {/* <div>
-            <p style={{color:'black'}}>Don't have an account? <a  style={{color:'black', fontWeight:'bold'}} href="/signup">Sign up</a></p>
-          </div> */}
+          {/* Generate OTP Button */}
+          <button type="button" onClick={handleGenerateOTP} style={{ marginBottom: '10px' }}>
+            Generate OTP
+          </button>
 
-          {error && <p style={{ color: 'red', marginTop: '10px', textAlign: 'center' }}>{error}</p>}
+          {/* OTP Verification Overlay */}
+          {otpGenerated && (
+            <VerificationAccount
+              email={formData.email}
+              otp={otp}
+              onClose={() => setOtpGenerated(false)}
+              onSuccess={handleOTPVerificationSuccess}
+            />
+          )}
+
+          {/* Login Button */}
           <button type="submit" className="login-button">
-            {isLoading ? (
-              <div className="spinner"></div>
-            ) : (
-              'Login'
-            )}
+            {isLoading ? 'Logging in...' : 'Login'}
           </button>
         </form>
         <ToastContainer />
