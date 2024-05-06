@@ -22,10 +22,10 @@ const getAllUsers = asyncHandler(async (req, res) => {
 // @route PATCH /users
 // @access Private
 const updateUser = asyncHandler(async (req, res) => {
-    const { id, username, email, roles, active, password } = req.body
+    const { id, email, roles, active, password } = req.body
 
     // Confirm data 
-    if (!id || !username || !email || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean') {
+    if (!id || !email || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean') {
         return res.status(400).json({ message: 'All fields except password are required' })
     }
 
@@ -44,7 +44,6 @@ const updateUser = asyncHandler(async (req, res) => {
         return res.status(409).json({ message: 'Duplicate username' })
     }
 
-    user.username = username
     user.email = email
     user.roles = roles
     user.active = active
