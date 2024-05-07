@@ -60,7 +60,7 @@ const WelcomePage = () => {
       <div style={{ marginTop: '40px', textAlign: 'center', width: '100%', color: 'black' }}>
         <h3 style={{ color: '#333', fontSize: '18px' }}>Additional Features</h3>
         <ul style={{ listStyleType: 'none', padding: '0', marginTop: '10px', fontSize: '16px' }}>
-          <li>API Integration - Connects seamlessly with CoinGecko and XYZ API.</li>
+          <li>API Integration - Connects seamlessly with CoinGecko and Exchange rate API.</li>
           <li>JSON Representation - Easily view and manipulate data in JSON format.</li>
           <li>CSV Export for Bookkeeping - Export data to CSV for efficient bookkeeping.</li>
           <li>Brief Descriptions - Provides clear insights into supported flows and functionalities.</li>
