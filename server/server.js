@@ -14,12 +14,15 @@ const DataRouter = require('./routes/Transaction')
 const UserRouter = require('./routes/userRoutes')
 const AuthRouter = require('./routes/AuthRoutes')
 const CsvRouter = require('./routes/CsvTransaction')
+const bodyParser = require('body-parser');
+const otpRoutes = require('./routes/Otp');
 
 //app routes
 app.use(logger)
 app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
+app.use(bodyParser.json())
 
 app.use('/', express.static(path.join(__dirname, 'public')))
 app.use('/', require('./routes/root'))
@@ -33,6 +36,8 @@ app.use('/api',AddRecipient)
 app.use('/api',DataRouter)
 app.use('/users',UserRouter)
 app.use('/api',CsvRouter)
+app.use('/api/otp', otpRoutes)
+
 
 
 //db connection
