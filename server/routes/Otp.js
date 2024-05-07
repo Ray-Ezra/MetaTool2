@@ -4,7 +4,7 @@ const speakeasy = require('speakeasy');
 const sgMail = require('@sendgrid/mail');
 
 // Initialize SendGrid with your API key
-sgMail.setApiKey('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');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Generate and send OTP to the user's email
 router.post('/generate-otp', (req, res) => {
