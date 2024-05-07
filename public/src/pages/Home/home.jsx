@@ -4,22 +4,17 @@ import Table from '../../components/Table/table';
 
 const WelcomePage = () => {
   // Sample data for recent transactions (replace with actual data)
-  const recentTransactions = [
-    { id: 1, type: 'Crypto', amount: 0.005, currency: 'BTC', date: '2024-05-01' },
-    { id: 2, type: 'Local Currency', amount: 50, currency: 'USD', date: '2024-04-28' },
-    // Add more transactions as needed...
-  ];
 
   // Function to handle scrolling to the recent transactions section
-  const scrollToRecentTransactions = () => {
-    const recentTransactionsSection = document.getElementById('recentTransactions');
-    if (recentTransactionsSection) {
-      window.scrollTo({
-        top: recentTransactionsSection.offsetTop,
-        behavior: 'smooth'  // Smooth scrolling animation
-      });
-    }
-  };
+  // const scrollToRecentTransactions = () => {
+  //   const recentTransactionsSection = document.getElementById('recentTransactions');
+  //   if (recentTransactionsSection) {
+  //     window.scrollTo({
+  //       top: recentTransactionsSection.offsetTop,
+  //       behavior: 'smooth'  // Smooth scrolling animation
+  //     });
+  //   }
+  // };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
@@ -110,8 +105,6 @@ const WelcomePage = () => {
       <div id="recentTransactions" style={{ marginTop: '40px', width: '100%' }}>
         <h3 style={{ color: '#333', fontSize: '18px', textAlign: 'center', marginBottom: '20px' }}>Recent Transactions</h3>
         <Table
-          data={recentTransactions}
-          columns={['Type', 'Amount', 'Currency', 'Date']}
         />
       </div>
 
