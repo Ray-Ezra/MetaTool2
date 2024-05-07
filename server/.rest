@@ -1,0 +1,10 @@
+#TRANSACTION REQUEST 
+
+POST http://localhost:4000/api/addRecipientTransaction
+Content-Type: application/json
+
+{
+  "tokenName": "Sample Token",
+  "descriptionName": "Sample Description",
+  "classificationName": "Sample Classification"
+}
