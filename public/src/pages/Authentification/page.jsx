@@ -8,8 +8,6 @@ import VerificationAccount from './verify';
 
 const LoginForm = () => {
   const navigate = useNavigate();
-
-  // State variables
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -19,7 +17,6 @@ const LoginForm = () => {
   const [openVerification, setOpenVerification] = useState(false);
   const [otp, setOtp] = useState('');
 
-  // Handle input change
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
@@ -28,7 +25,6 @@ const LoginForm = () => {
     });
   };
 
-  // Toggle password visibility
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
@@ -89,8 +85,7 @@ const LoginForm = () => {
           <h2 style={{ color: 'black', marginLeft: '10px', transform: 'translateY(10%)' }}>DirectEd</h2>
         </div>
         <h2 style={{ fontSize: '20px', marginBottom: '20px', color: 'black', fontWeight: '600', textAlign: 'left' }}>Login</h2>
-        <form onSubmit={(e) => e.preventDefault()}>
-          {/* Email input */}
+        <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '10px' }}>
             <label htmlFor="email" style={{ display: 'block', marginBottom: '5px', color: 'black', fontWeight: '500' }}>Email Address:</label>
             <input
@@ -109,11 +104,25 @@ const LoginForm = () => {
                 background: 'transparent',
                 transition: 'border-color 0.3s, box-shadow 0.3s', 
                 outline: 'none',
+                borderLeft: 'none', 
+                borderTop: 'none', 
+                borderRight: 'none', 
+              }}
+              onFocus={(e) => {
+                e.target.style.borderBottom = '2px solid #6B8065'; 
+                e.target.style.boxShadow = '0 2px 10px 3px #6B8065';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderBottom = '2px solid black'; 
+                e.target.style.boxShadow = 'none'; 
               }}
             />
           </div>
           <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
             <label htmlFor="password" style={{ display: 'block', color: 'black', fontWeight: '500' }}>Password:</label>
+          </div>
+
+          <div style={{ position: 'relative' }}>
             <input
               type={showPassword ? 'text' : 'password'}
               id="password"
@@ -124,15 +133,30 @@ const LoginForm = () => {
               style={{
                 width: '100%',
                 padding: '10px',
+                border: 'none',
                 borderBottom: '2px solid black', 
                 borderRadius: '0px',
                 boxSizing: 'border-box',
-                background: 'transparent',
-                transition: 'border-color 0.3s, box-shadow 0.3s', 
+                background: 'transparent', 
+                transition: 'border-bottom-color 0.3s',
                 outline: 'none',
+                boxShadow: 'none',
+              }}
+              onFocus={(e) => {
+                e.target.style.borderBottomColor = '#6B8065'; 
+                e.target.style.boxShadow = '0 0 10px 3px #6B8065';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderBottom = '2px solid black'; 
+                e.target.style.boxShadow = 'none'; // Remove glow effect on blur
               }}
             />
-            <span onClick={handleTogglePassword} style={{ cursor: 'pointer', color: 'black' }}>
+
+            <span
+              onClick={handleTogglePassword}
+              style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)', cursor: 'pointer', color: 'black', }}
+              title={showPassword ? 'Hide password' : 'Show password'}
+            >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
           </div>
@@ -143,7 +167,11 @@ const LoginForm = () => {
           </div>
 
           <button type="submit" className="login-button">
-            {isLoading ? 'Logging in...' : 'Login'}
+            {isLoading ? (
+              <div className="spinner"></div>
+            ) : (
+              'Login'
+            )}
           </button>
         </form>
         <ToastContainer />
