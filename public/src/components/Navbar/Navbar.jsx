@@ -4,8 +4,8 @@ import { NavLink, useLocation } from 'react-router-dom';
 const Navbar = () => {
   const location = useLocation();
 
-  const isHomePage = location.pathname === "/home";
-  const hasButton = isHomePage;
+  // const isHomePage = location.pathname === "/home";
+  // const hasButton = isHomePage;
 
   return (
     <div className="navbar" style={{ top: 0, backgroundColor: '#395241', padding: '10px', margin: '-8px', display: 'flex', color: 'black', textAlign: 'center', justifyContent: 'space-between', alignItems: 'center', fontSize: '15px', fontWeight: 'bold' }}>
@@ -15,7 +15,7 @@ const Navbar = () => {
         </NavLink>
       </div>
       <div style={{ marginLeft: 'auto' }}>
-        {hasButton ? (
+        {/* {hasButton ? (
           <NavLink to="/form-display">
             <button 
               style={{ 
@@ -41,11 +41,11 @@ const Navbar = () => {
               }}
             >
               Transact
-            </button>
-          </NavLink>
-        ) : (
+            </button> */}
+          {/* </NavLink> */}
+        {/* // ) : ( */}
           <span style={{ color: 'white', marginRight: '15px', animation: 'pulsate 2s infinite' }}>METATOOL</span>
-        )}
+        {/* // )} */}
       </div>
     </div>
   );
