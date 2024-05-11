@@ -11,7 +11,7 @@ const MetadataComponent = () => {
   const metadata = [
     {
       classification: "Bitcoin transact",
-      description: "fdfd",
+      description: "Stipends",
       exchangeRates: [
         {
           base_currency: "ADA",
