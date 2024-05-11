@@ -78,8 +78,8 @@ const LoginForm = () => {
   };
 
   return (
-    <div className='flex justify-center items-center min-h-[92vh] md:min-h-[90vh] bg-[#f2eee3]'>
-      <div className='bg-[#f2eee3] md:mx-auto w-full md:w-[481px] px-4 md:px-8 py-6 md:border-2 md:border-[#E7DFCB] rounded-[10px]'>
+    <div className='flex justify-center items-center min-h-[92vh] md:min-h-[90vh]'>
+      <div className='bg-[#f2eee3] md:mx-auto w-full md:w-[480px] px-4 md:px-8 py-6 md:border-2 md:border-[#E7DFCB] rounded-[10px]'>
         <div className='flex items-center gap-x-3'>
           <img className='w-11' src="/directed-logo.svg" alt="DirectEd" />
           <h2 className='font-poppins text-2xl text-[#333333] font-semibold'>DirectEd</h2>

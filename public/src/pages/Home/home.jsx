@@ -4,10 +4,9 @@ import { xonokai } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Button } from '../../components/Customs/button';
 import { NavLink } from 'react-router-dom';
 import Title from '../../components/Customs/Title';
-import Table from '../../components/Table/table'
+import Table from '../../components/Table/table';
 
 const MetadataComponent = () => {
-  // Sample metadata (replace with actual metadata)
   const metadata = [
     {
       classification: "Bitcoin transact",
@@ -16,11 +15,10 @@ const MetadataComponent = () => {
         {
           base_currency: "ADA",
           quote_currency: "USD",
-          rate: "$$",
+          rate: "2.33",
           time: "04:13",
           stablecoin: false,
           NCA: false,
-          _id: "660dd485fbbdc0440792a6ea"
         }
       ],
       recipients: [
@@ -32,37 +30,34 @@ const MetadataComponent = () => {
           amount1: "12"
         }
       ],
-      verified: true,
-      createdAt: "2024-04-03T22:13:25.011Z",
-      updatedAt: "2024-04-03T22:13:25.011Z"
+
     }
   ];
 
-  // Extract the first metadata entry (assuming there's only one in the array)
   const entry = metadata[0];
 
-  // Convert metadata to JSON string with proper indentation
   const jsonString = JSON.stringify(entry, null, 2);
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'flex-start', marginTop: '40px', width: '100%' }}>
-      {/* Left Column - Details */}
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '70vh' }}>
-        <div style={{ maxWidth: '800px', padding: '20px', borderRadius: '10px' }}>
-          <Title>
-            Metadata Details
-          </Title>
-          <p style={{ marginTop: '20px', fontSize: '16px', color: 'black', textShadow: 'unset', fontWeight: 'bold' }}>
+    <div className="flex w-full flex-col md:flex-row">
+      <div className="flex justify-center items-center md:w-2/3 p-4">
+        <div>
+          <Title>Transaction Metadata Generator</Title>
+          <p className="mt-4 text-lg font-bold">
+            Seamlessly create JSON and CSV files enriched with metadata for transactional transparency and data management.
+          </p>
+          <p className="mt-4">
             Metadata in transactions provides crucial additional data beyond basic transaction details, enhancing transparency and functionality. This data includes classification, descriptions, and timestamps, allowing for comprehensive record-keeping and analysis.
           </p>
           <NavLink to="/form-display">
-            <Button style={{ padding: '10px', borderRadius: '10px', backgroundColor: '#395241', color: '#fff', border: 'none' }}>Generate</Button>
+            <Button className="px-4 py-2 mt-5 rounded-lg bg-green-700 text-white">
+              Generate Files
+            </Button>
           </NavLink>
         </div>
       </div>
 
-      {/* Right Column - JSON Representation */}
-      <div style={{ overflowY: 'auto' }}>
+      <div className=" h-3/4">
         <SyntaxHighlighter language="json" style={xonokai}>
           {jsonString}
         </SyntaxHighlighter>
@@ -73,13 +68,10 @@ const MetadataComponent = () => {
 
 const WelcomePage = () => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
-      {/* Main Content */}
+    <div className="flex flex-col items-center p-4">
       <MetadataComponent />
-
-      {/* Recent Transactions Section */}
-      <div id="recentTransactions" style={{ marginTop: '40px', width: '100%' }}>
-        <h3 style={{ color: '#333', fontSize: '18px', textAlign: 'center', marginBottom: '20px' }}>Recent Transactions</h3>
+      <div className="mt-10 w-full">
+        <h3 className="text-lg font-semibold text-center mb-4">Recent Transactions</h3>
         <Table />
       </div>
     </div>
