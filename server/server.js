@@ -15,7 +15,7 @@ const UserRouter = require('./routes/userRoutes')
 const AuthRouter = require('./routes/AuthRoutes')
 const CsvRouter = require('./routes/CsvTransaction')
 const bodyParser = require('body-parser');
-const otpRoutes = require('./routes/Otp');
+const otpRoutes = require('./routes/otp');
 
 //app routes
 app.use(logger)

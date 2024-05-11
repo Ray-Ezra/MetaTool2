@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { SERVER_URL } from '../../../../constants';
 
 const Form6 = ({ formData }) => {
   const [txHash, setTxHash] = useState('');
@@ -26,7 +27,7 @@ const Form6 = ({ formData }) => {
 
   const handleSubmitData = (e) => {
     e.preventDefault();
-    const serverUrl = `https://metatool2.onrender.com/api/addDetails`;
+    const serverUrl = `${SERVER_URL}/api/addDetails`;
     const recipients = formDataFromForm4.form4Data.recipients;
 
     const sendData = recipients.flatMap(recipient => {
