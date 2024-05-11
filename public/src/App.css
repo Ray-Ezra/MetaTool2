@@ -1,4 +1,4 @@
-  .login-button {
+  /* .login-button {
     background-color: #6B8065;
     color: #fff;
     width: 50%;
@@ -11,7 +11,7 @@
     transition: background-color 0.2s ease-in-out;
     margin-top: 10px;
     position: relative;
-  }
+  } */
   
   .spinner {
     position: absolute;
