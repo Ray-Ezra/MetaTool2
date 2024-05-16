@@ -5,6 +5,7 @@ import { Button } from '../../components/Customs/button';
 import { NavLink } from 'react-router-dom';
 import Title from '../../components/Customs/Title';
 import Table from '../../components/Table/table';
+import CryptoTable from './CryptoTable';
 
 const MetadataComponent = () => {
   const metadata = [
@@ -49,11 +50,19 @@ const MetadataComponent = () => {
           <p className="mt-4">
             Metadata in transactions provides crucial additional data beyond basic transaction details, enhancing transparency and functionality. This data includes classification, descriptions, and timestamps, allowing for comprehensive record-keeping and analysis.
           </p>
-          <NavLink to="/form-display">
-            <Button className="px-4 py-2 mt-5 rounded-lg bg-green-700 text-white">
-              Generate Files
-            </Button>
-          </NavLink>
+          <div>
+            <NavLink to="/form-display">
+              <Button className="px-4 py-2 mt-5 rounded-lg bg-green-700 text-white">
+                Generate Files
+              </Button>
+            </NavLink>
+            <NavLink to="/recent">
+              <Button className="px-4 py-2 mt-5 ml-4 rounded-lg bg-green-700 text-white">
+                Recent
+              </Button>
+            </NavLink>
+          </div>
+
         </div>
       </div>
 
@@ -71,8 +80,8 @@ const WelcomePage = () => {
     <div className="flex flex-col items-center p-4">
       <MetadataComponent />
       <div className="mt-10 w-full">
-        <h3 className="text-lg font-semibold text-center mb-4">Recent Transactions</h3>
-        <Table />
+        <h3 className="text-lg font-semibold text-center mb-4">Crypto Currencies</h3>
+        <CryptoTable />
       </div>
     </div>
   );

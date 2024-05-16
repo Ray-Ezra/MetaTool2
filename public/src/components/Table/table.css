@@ -1,17 +1,19 @@
+/* table.css */
+
 .title {
   display: flex;
   align-items: center;
 }
 
 .table-container {
-  height: 75vh; /* Set the height of the table container to 75% of the viewport height */
-  overflow: auto; /* Enable vertical scrolling if content overflows */
+  height: 75vh; /* Set desired height (75% of viewport height) */
+  overflow: auto; /* Enable vertical scrolling */
 }
 
 table {
   width: 100%;
-  table-layout: fixed; /* Ensures all columns have the same width */
-  border-collapse: collapse; /* Collapses borders between table cells */
+  table-layout: fixed;
+  border-collapse: collapse;
 }
 
 th {
@@ -19,18 +21,18 @@ th {
   font-weight: 500;
   padding: 10px;
   text-align: left;
+  color: white; /* Text color for table headers */
 }
 
 th,
 td {
-  color: black;
   padding: 8px;
   font-size: small;
   border: 1px solid #ddd;
   text-align: left;
-  white-space: nowrap; /* Prevents text wrapping */
-  overflow: hidden; /* Hides overflow content */
-  text-overflow: ellipsis; /* Displays ellipsis (...) when content overflows */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .icon1 {
@@ -42,7 +44,6 @@ td {
   background-color: rgb(177, 175, 175);
 }
 
-/* Add hover effect */
 td:hover {
   overflow: visible;
   white-space: normal;
@@ -50,7 +51,6 @@ td:hover {
   z-index: 2;
 }
 
-/* Make the table stack vertically on small screens */
 @media only screen and (max-width: 768px) {
   th,
   td {
@@ -73,13 +73,13 @@ td:hover {
   }
 
   .title {
-    justify-content: space-between; /* Align items in the title div */
-    padding: 10px; /* Add padding to the title div */
+    justify-content: space-between;
+    padding: 10px;
   }
 
   .pagination {
     display: flex;
-    justify-content: space-between; /* Align items in the pagination div */
-    padding: 10px; /* Add padding to the pagination div */
+    justify-content: space-between;
+    padding: 10px;
   }
 }

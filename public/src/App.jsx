@@ -9,6 +9,7 @@ import CsvDownload from './pages/Transaction/CsvDownload'
 import Navbar from './components/Navbar/Navbar'
 import SignUp from './pages/signup/signup'
 import './App.css'
+import Table from './components/Table/table'
 
 
 
@@ -20,6 +21,7 @@ const App = () => {
       <Route path='/' element={<LoginForm/>}></Route>
       <Route path='/signup' element={<SignUp/>}></Route>
       <Route path='/home' element={<WelcomePage/>}></Route>
+      <Route path='/recent' element={<Table/>}></Route>
       <Route path='/form-display' element={<FormDisplay/>}></Route>
       <Route path='/generate' element={<TransactionDetailsPage/>}></Route>
       <Route path='/form6' element={<Form6/>}></Route>
