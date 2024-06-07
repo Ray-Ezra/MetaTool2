@@ -11,7 +11,7 @@ const Navbar = () => {
     <div className="navbar" style={{ top: 0, backgroundColor: '#395241', padding: '17px', display: 'flex', color: 'black', textAlign: 'center', justifyContent: 'space-between', alignItems: 'center', fontSize: '15px', fontWeight: 'bold' }}>
       <div className='logo'>
         <NavLink to="/home">
-          <img src="/logoside.png" alt="Your Image" width='150px' height='40px' style={{ maxWidth: '100%' }} />
+          <img src="" alt="META" width='150px' height='40px' style={{ maxWidth: '100%' }} />
         </NavLink>
       </div>
       <div style={{ marginLeft: 'auto' }}>
