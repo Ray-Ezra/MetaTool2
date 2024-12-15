@@ -56,6 +56,7 @@ const LoginForm = () => {
         const otpData = await otpResponse.json();
 
         if (otpResponse.ok) {
+          localStorage.setItem('token', data.token)
           setOpenVerification(true);
           setOtp(otpData.otp);
         } else {
