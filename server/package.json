@@ -7,8 +7,8 @@
     "node": "18.16.0"
   },
   "scripts": {
-    "start": "node server",
-    "dev": "nodemon"
+    "start": "node init && node server",
+    "dev": "node init && nodemon"
   },
   "keywords": [],
   "author": "",
